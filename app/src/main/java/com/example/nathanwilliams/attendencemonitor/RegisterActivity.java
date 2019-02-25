@@ -2,10 +2,10 @@ package com.example.nathanwilliams.attendencemonitor;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
+import androidx.cardview.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -132,7 +132,6 @@ public class RegisterActivity extends AppCompatActivity
 
                     HashMap<String,String> userMap = new HashMap<>();
                     userMap.put("name",display_name);
-                    userMap.put("status","hello world");
                     userMap.put("device_token",deviceToken);
 
                     Database.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {

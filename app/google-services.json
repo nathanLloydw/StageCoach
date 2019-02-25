@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "945205283880",
-    "firebase_url": "https://stagecoach-66f35.firebaseio.com",
-    "project_id": "stagecoach-66f35",
-    "storage_bucket": "stagecoach-66f35.appspot.com"
+    "project_number": "909117909431",
+    "firebase_url": "https://attendance-monitor-22ea5.firebaseio.com",
+    "project_id": "attendance-monitor-22ea5",
+    "storage_bucket": "attendance-monitor-22ea5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:945205283880:android:76b30acd3fbf55c8",
+        "mobilesdk_app_id": "1:909117909431:android:76b30acd3fbf55c8",
         "android_client_info": {
           "package_name": "com.example.nathanwilliams.attendencemonitor"
         }
       },
       "oauth_client": [
         {
-          "client_id": "945205283880-dpavh3maeaggj490h2h8uh4crhib3qv7.apps.googleusercontent.com",
+          "client_id": "909117909431-dud94kd5j41ck2njupt7i3odhfs3ni0l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBdHMNHGBHLRxVXkb3DxMRmWEBNf062iq0"
+          "current_key": "AIzaSyDQzDGifcwDwviRkYf1TTvDqU6ucgxD4zE"
         }
       ],
       "services": {

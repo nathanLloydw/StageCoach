@@ -1,140 +1,150 @@
 package com.example.nathanwilliams.attendencemonitor;
 
-import android.content.Intent;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Html;
-import android.transition.Slide;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import android.content.Intent;
+import android.graphics.Color;
+import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
 
 public class HomeActivity extends AppCompatActivity
 {
-    private ViewPager mSlideViewPager;
-    private LinearLayout mDotLayout;
 
-    private SliderAdapter sliderAdapter;
-    private TextView[] mDots;
 
-    private Button signOutBtn;
-    private Button nextBtn,prevBtn;
-
-    private int currentPage;
+    RecyclerView recyclerView;
+    DatabaseReference databaseReference;
+    FirebaseRecyclerOptions<ClubRecycler> options;
+    FirebaseRecyclerAdapter<ClubRecycler,ClubViewHolder> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        centerTitle();
 
-        mSlideViewPager = (ViewPager) findViewById(R.id.slideViewPager);
-        mDotLayout = (LinearLayout) findViewById(R.id.dot_layout);
+        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        final String uid = current_user.getUid();
 
-        sliderAdapter = new SliderAdapter(this);
-        mSlideViewPager.setAdapter(sliderAdapter);
-
-        addDotsIndicator(0);
-
-        mSlideViewPager.addOnPageChangeListener(viewListener);
-
-        nextBtn = findViewById(R.id.nextBtn);
-        prevBtn = findViewById(R.id.prevBtn);
-        /*signOutBtn = findViewById(R.id.home_signout);
-
-        signOutBtn.setOnClickListener(new View.OnClickListener()
-        {
+        FloatingActionButton fab = findViewById(R.id.add_club);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                FirebaseAuth.getInstance().signOut();
-                Intent logoutIntent = new Intent(HomeActivity.this, SignInActivity.class);
-                startActivity(logoutIntent);
-                finish();
+            public void onClick(View view) {
+
+                Intent add_club_intent = new Intent(HomeActivity.this,addClubActivity.class);
+                startActivity(add_club_intent);
+                //Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
-        });*/
+        });
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Clubs");
+
+        options = new FirebaseRecyclerOptions.Builder<ClubRecycler>().setQuery(databaseReference,ClubRecycler.class).build();
+
+        adapter = new FirebaseRecyclerAdapter<ClubRecycler, ClubViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(ClubViewHolder holder, int position, ClubRecycler model)
+            {
+
+                holder.clubName.setText(model.getClubName());
+                holder.clubAge.setText(model.getClubAgeGroup());
+                holder.clubCard.setCardBackgroundColor(Color.parseColor(model.getClubColor()));
+                holder.clubLocation.setText(model.getClubLocation());
+
+                Picasso.get().load(model.getClubImage()).placeholder(R.drawable.avatar).into(holder.clubImage);
+            }
+
+            @NonNull
+            @Override
+            public ClubViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i)
+            {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.club_recycler_activity,parent,false);
+
+                return new ClubViewHolder(view);
+            }
+        };
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),1);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        adapter.startListening();
+        recyclerView.setAdapter(adapter);
+
     }
 
-    public void addDotsIndicator(int pos)
+    @Override
+    protected void onStart()
     {
-        mDots = new TextView[sliderAdapter.slide_headings.length];
-        mDotLayout.removeAllViews();
-        //mDots = new TextView[3];
+        super.onStart();
 
-        for(int i = 0; i <mDots.length; i++)
-        {
-            mDots[i] = new TextView(this);
-            mDots[i].setText(Html.fromHtml("&#8226;"));
-            mDots[i].setTextSize(35);
-            mDots[i].setTextColor(getResources().getColor(R.color.colorTransparentWhite));
-
-            mDotLayout.addView(mDots[i]);
-
-        }
-
-        if(mDots.length > 0)
-        {
-            mDots[pos].setTextColor(getResources().getColor(R.color.colorWhite));
-        }
-
+        if(adapter!= null)
+            adapter.startListening();
     }
 
-    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int i, float v, int i1) {
+    @Override
+    protected void onStop()
+    {
+        if(adapter!=null)
+            adapter.stopListening();
+        super.onStop();
+    }
 
-        }
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if(adapter!= null)
+            adapter.startListening();
+    }
 
-        @Override
-        public void onPageSelected(int i)
-        {
+    private void centerTitle()
+    {
+        ArrayList<View> textViews = new ArrayList<>();
 
-            addDotsIndicator(i);
-            currentPage = i;
+        getWindow().getDecorView().findViewsWithText(textViews, getTitle(), View.FIND_VIEWS_WITH_TEXT);
 
-            if(i == 0)
-            {
-                nextBtn.setEnabled(true);
-
-                prevBtn.setEnabled(false);
-                prevBtn.setVisibility(View.INVISIBLE);
-                nextBtn.setVisibility(View.VISIBLE);
-
-                nextBtn.setText("next");
-                prevBtn.setText("");
-
+        if(textViews.size() > 0) {
+            AppCompatTextView appCompatTextView = null;
+            if(textViews.size() == 1) {
+                appCompatTextView = (AppCompatTextView) textViews.get(0);
+            } else {
+                for(View v : textViews) {
+                    if(v.getParent() instanceof Toolbar) {
+                        appCompatTextView = (AppCompatTextView) v;
+                        break;
+                    }
+                }
             }
-            else if(i == mDots.length - 1)
-            {
-                nextBtn.setEnabled(false);
 
-                prevBtn.setEnabled(true);
-                nextBtn.setVisibility(View.INVISIBLE);
-                prevBtn.setVisibility(View.VISIBLE);
-
-                nextBtn.setText("");
-                prevBtn.setText("back");
-            }
-            else
-            {
-                nextBtn.setEnabled(true);
-                prevBtn.setEnabled(true);
-
-                nextBtn.setVisibility(View.VISIBLE);
-                prevBtn.setVisibility(View.VISIBLE);
-
-                nextBtn.setText("next");
-                prevBtn.setText("back");
+            if(appCompatTextView != null) {
+                ViewGroup.LayoutParams params = appCompatTextView.getLayoutParams();
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                appCompatTextView.setLayoutParams(params);
+                appCompatTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             }
         }
+    }
 
-        @Override
-        public void onPageScrollStateChanged(int i) {
-
-        }
-    };
 }
