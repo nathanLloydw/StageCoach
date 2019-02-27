@@ -5,6 +5,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
@@ -14,7 +15,8 @@ public class ClubViewHolder extends RecyclerView.ViewHolder
 {
     public TextView clubName;
     public TextView clubAge;
-    public CardView clubCard;
+    public CardView clubCardTop;
+    public RelativeLayout clubCardBottom;
     public TextView clubLocation;
     public SelectableRoundedImageView clubImage;
 
@@ -24,7 +26,8 @@ public class ClubViewHolder extends RecyclerView.ViewHolder
 
         clubName = itemView.findViewById(R.id.club_name);
         clubAge = itemView.findViewById(R.id.club_age);
-        clubCard = itemView.findViewById(R.id.club_card);
+        clubCardTop = itemView.findViewById(R.id.club_card);
+        clubCardBottom = itemView.findViewById(R.id.club_card_bottom);
         clubLocation = itemView.findViewById(R.id.club_location);
         clubImage = itemView.findViewById(R.id.club_image);
 

@@ -71,7 +71,16 @@ public class HomeActivity extends AppCompatActivity
 
                 holder.clubName.setText(model.getClubName());
                 holder.clubAge.setText(model.getClubAgeGroup());
-                holder.clubCard.setCardBackgroundColor(Color.parseColor(model.getClubColor()));
+                holder.clubCardTop.setCardBackgroundColor(Color.parseColor(model.getClubColor()));
+
+                String TransparentColor = model.getClubColor().replace("#","");
+                TransparentColor = "#80"+TransparentColor;
+
+                System.out.println(TransparentColor);
+                System.out.println(model.getClubColor());
+
+                holder.clubCardBottom.setBackgroundColor(Color.parseColor(TransparentColor));
+
                 holder.clubLocation.setText(model.getClubLocation());
 
                 Picasso.get().load(model.getClubImage()).placeholder(R.drawable.avatar).into(holder.clubImage);
