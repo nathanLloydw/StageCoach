@@ -15,9 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +59,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-                Intent add_club_intent = new Intent(HomeActivity.this,addClubActivity.class);
+                Intent add_club_intent = new Intent(HomeActivity.this,addEditClubActivity.class);
                 add_club_intent.putExtra("add/edit","add");
                 startActivity(add_club_intent);
 
@@ -88,11 +85,21 @@ public class HomeActivity extends AppCompatActivity
                 Picasso.get().load(model.getClubImage()).placeholder(R.drawable.avatar).into(holder.clubImage);
 
                 String TransparentColor = model.getClubColor().replace("#","");
-                TransparentColor = "#80"+TransparentColor;
 
-                holder.clubCardBottom.setBackgroundColor(Color.parseColor(TransparentColor));
+                TransparentColor = "#EA"+TransparentColor;
+
+                int newColor = Color.parseColor(TransparentColor);
+                newColor = darken(newColor,0.7);
+
+
+                holder.clubCardBottom.setBackgroundColor(newColor);
 
                 final String club = model.getClubName();
+                final String age = model.getClubAgeGroup();
+                final String location = model.getClubLocation();
+                final String picture = model.getClubImage();
+                final String color = model.getClubColor();
+                final String mentor = model.getClubMentor();
 
                 ImageButton takeAttendence = holder.clubAttendenceButton;
                 takeAttendence.setOnClickListener(new View.OnClickListener()
@@ -121,8 +128,8 @@ public class HomeActivity extends AppCompatActivity
                     public void onClick(View v)
                     {
 
-                        Intent add_club_intent = new Intent(HomeActivity.this,addClubActivity.class);
-                        add_club_intent.putExtra("add/edit","edit");
+                        Intent add_club_intent = new Intent(HomeActivity.this,addEditClubActivity.class);
+                        add_club_intent.putExtra("add/edit","edit "+club+" "+age+" "+location+" "+picture+" "+color+" "+mentor);
                         startActivity(add_club_intent);
 
                     }
@@ -249,5 +256,22 @@ public class HomeActivity extends AppCompatActivity
             }
         }
     }
+
+    public static int darken(int color, double fraction) {
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        red = darkenColor(red, fraction);
+        green = darkenColor(green, fraction);
+        blue = darkenColor(blue, fraction);
+        int alpha = Color.alpha(color);
+
+        return Color.argb(alpha, red, green, blue);
+    }
+
+    private static int darkenColor(int color, double fraction) {
+        return (int)Math.max(color - (color * fraction), 0);
+    }
+
 
 }

@@ -51,7 +51,6 @@ public class ClubRecycler
         Color = clubColor;
     }
 
-
     public String getClubLocation()
     {
         return Location;
@@ -62,11 +61,17 @@ public class ClubRecycler
         Location = clubLocation;
     }
 
+    public String getClubMentor() { return Mentor; }
+
+    public void setClubMentor(String clubMentor)
+    {
+        Mentor = clubMentor;
+    }
+
     public String getClubImage() { return Img; }
 
     public void setClubImage(String clubImage)
     {
         Img = clubImage;
     }
-
 }
