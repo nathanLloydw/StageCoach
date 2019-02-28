@@ -21,6 +21,9 @@ public class ClubViewHolder extends RecyclerView.ViewHolder
     public TextView clubLocation;
     public SelectableRoundedImageView clubImage;
     public ImageButton clubDeleteButton;
+    public ImageButton clubEditButton;
+    public ImageButton clubStatsButton;
+    public ImageButton clubAttendenceButton;
 
     public ClubViewHolder(@NonNull View itemView)
     {
@@ -33,6 +36,9 @@ public class ClubViewHolder extends RecyclerView.ViewHolder
         clubLocation = itemView.findViewById(R.id.club_location);
         clubImage = itemView.findViewById(R.id.club_image);
         clubDeleteButton = itemView.findViewById(R.id.club_delete_button);
+        clubEditButton = itemView.findViewById(R.id.club_edit_button);
+        clubStatsButton = itemView.findViewById(R.id.club_stats_button);
+        clubAttendenceButton = itemView.findViewById(R.id.club_attendence_button);
 
     }
 

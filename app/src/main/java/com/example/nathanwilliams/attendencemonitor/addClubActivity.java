@@ -63,6 +63,7 @@ public class addClubActivity extends AppCompatActivity
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri filePath;
 
+    private TextView addOrEdit;
     private ProgressDialog addClubProgress;
     private DatabaseReference mDatabase;
     private FirebaseUser current_user;
@@ -78,6 +79,12 @@ public class addClubActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_club);
         centerTitle();
+
+        Intent intent = getIntent();
+        String GetaddOrEdit = intent.getStringExtra("add/edit");
+
+        addOrEdit = findViewById(R.id.club_add_or_edit);
+        addOrEdit.setText(GetaddOrEdit);
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();

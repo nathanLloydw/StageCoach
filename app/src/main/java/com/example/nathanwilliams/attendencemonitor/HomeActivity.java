@@ -63,8 +63,9 @@ public class HomeActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 Intent add_club_intent = new Intent(HomeActivity.this,addClubActivity.class);
+                add_club_intent.putExtra("add/edit","add");
                 startActivity(add_club_intent);
-                //Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
             }
         });
 
@@ -119,6 +120,10 @@ public class HomeActivity extends AppCompatActivity
                     @Override
                     public void onClick(View v)
                     {
+
+                        Intent add_club_intent = new Intent(HomeActivity.this,addClubActivity.class);
+                        add_club_intent.putExtra("add/edit","edit");
+                        startActivity(add_club_intent);
 
                     }
                 });
