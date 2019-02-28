@@ -92,6 +92,38 @@ public class HomeActivity extends AppCompatActivity
                 holder.clubCardBottom.setBackgroundColor(Color.parseColor(TransparentColor));
 
                 final String club = model.getClubName();
+
+                ImageButton takeAttendence = holder.clubAttendenceButton;
+                takeAttendence.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+
+                    }
+                });
+
+                ImageButton stats = holder.clubStatsButton;
+                stats.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+
+                    }
+                });
+
+                ImageButton edit = holder.clubEditButton;
+                edit.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+
+                    }
+                });
+
+
                 ImageButton delete = holder.clubDeleteButton;
                 delete.setOnClickListener(new View.OnClickListener()
                 {
@@ -116,9 +148,9 @@ public class HomeActivity extends AppCompatActivity
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot)
                                     {
-                                        for (DataSnapshot appleSnapshot: dataSnapshot.getChildren())
+                                        for (DataSnapshot deleteSnapshot: dataSnapshot.getChildren())
                                         {
-                                            appleSnapshot.getRef().removeValue();
+                                            deleteSnapshot.getRef().removeValue();
                                         }
                                     }
                                     @Override
