@@ -263,7 +263,6 @@ public class addClubActivity extends AppCompatActivity
                                             {
                                                 if (task.isSuccessful())
                                                 {
-
                                                     addClubProgress.dismiss();
 
                                                     Intent mainIntent = new Intent(addClubActivity.this,HomeActivity.class);

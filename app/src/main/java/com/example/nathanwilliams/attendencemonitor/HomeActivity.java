@@ -1,27 +1,38 @@
 package com.example.nathanwilliams.attendencemonitor;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -71,19 +82,65 @@ public class HomeActivity extends AppCompatActivity
 
                 holder.clubName.setText(model.getClubName());
                 holder.clubAge.setText(model.getClubAgeGroup());
+                holder.clubLocation.setText(model.getClubLocation());
                 holder.clubCardTop.setCardBackgroundColor(Color.parseColor(model.getClubColor()));
+                Picasso.get().load(model.getClubImage()).placeholder(R.drawable.avatar).into(holder.clubImage);
 
                 String TransparentColor = model.getClubColor().replace("#","");
                 TransparentColor = "#80"+TransparentColor;
 
-                System.out.println(TransparentColor);
-                System.out.println(model.getClubColor());
-
                 holder.clubCardBottom.setBackgroundColor(Color.parseColor(TransparentColor));
 
-                holder.clubLocation.setText(model.getClubLocation());
+                final String club = model.getClubName();
+                ImageButton delete = holder.clubDeleteButton;
+                delete.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
 
-                Picasso.get().load(model.getClubImage()).placeholder(R.drawable.avatar).into(holder.clubImage);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                        builder.setTitle("Delete club entry.");
+                        builder.setMessage("You are about to delete all records of this club from the database. Do you really want to proceed ?");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Clubs");
+                                Query deleteQuery = ref.orderByChild("Name").equalTo(club);
+
+                                deleteQuery.addListenerForSingleValueEvent(new ValueEventListener()
+                                {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot)
+                                    {
+                                        for (DataSnapshot appleSnapshot: dataSnapshot.getChildren())
+                                        {
+                                            appleSnapshot.getRef().removeValue();
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) { }
+
+                                });
+                            }
+                        });
+
+                        builder.setNegativeButton("No", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+
+                            }
+                        });
+
+                        builder.show();
+                    }
+                });
+
             }
 
             @NonNull
