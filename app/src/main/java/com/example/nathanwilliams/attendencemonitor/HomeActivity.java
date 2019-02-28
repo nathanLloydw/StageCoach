@@ -129,7 +129,13 @@ public class HomeActivity extends AppCompatActivity
                     {
 
                         Intent add_club_intent = new Intent(HomeActivity.this,addEditClubActivity.class);
-                        add_club_intent.putExtra("add/edit","edit "+club+" "+age+" "+location+" "+picture+" "+color+" "+mentor);
+                        add_club_intent.putExtra("add/edit","edit ");
+                        add_club_intent.putExtra("name",club);
+                        add_club_intent.putExtra("age",age);
+                        add_club_intent.putExtra("location",location);
+                        add_club_intent.putExtra("imgURL",picture);
+                        add_club_intent.putExtra("color",color);
+                        add_club_intent.putExtra("mentor",mentor);
                         startActivity(add_club_intent);
 
                     }

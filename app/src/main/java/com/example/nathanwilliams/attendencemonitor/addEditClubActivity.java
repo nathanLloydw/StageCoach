@@ -55,6 +55,7 @@ public class addEditClubActivity extends AppCompatActivity
     private RelativeLayout curentColor;
     private int defaultColor;
 
+    private Boolean add = true;
     private Button addImage;
     private ImageButton colorPicker;
     private SelectableRoundedImageView Img;
@@ -64,7 +65,6 @@ public class addEditClubActivity extends AppCompatActivity
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri filePath;
 
-    private TextView addOrEdit;
     private ProgressDialog addClubProgress;
     private DatabaseReference mDatabase;
     private FirebaseUser current_user;
@@ -97,43 +97,38 @@ public class addEditClubActivity extends AppCompatActivity
         defaultColor = ContextCompat.getColor(addEditClubActivity.this,R.color.colorAccent);
         colorPicker = findViewById(R.id.club_colorPicker);
 
+        ClubName = findViewById(R.id.club_name);
+        ClubAgeRange = findViewById(R.id.club_age_range);
+        ClubLocation = findViewById(R.id.club_location);
+        ClubMentor = findViewById(R.id.club_mentor);
+        Img = findViewById(R.id.club_current_pic);
+
         Intent intent = getIntent();
         String GetAddOrEdit = intent.getStringExtra("add/edit");
-        System.out.println(GetAddOrEdit);
 
-        if(GetAddOrEdit.contains("edit "))
+        if(GetAddOrEdit.contains("edit"))
         {
-            String[] output = GetAddOrEdit.split(" ",7);
+            add = false;
+            String club = intent.getStringExtra("name");
+            String age = intent.getStringExtra("age");
+            String location = intent.getStringExtra("location");
+            String picture = intent.getStringExtra("imgURL");
+            String color = intent.getStringExtra("color");
+            String mentor = intent.getStringExtra("mentor");
+            System.out.println(GetAddOrEdit);
 
-
-            ClubName = findViewById(R.id.club_name);
-            ClubAgeRange = findViewById(R.id.club_age_range);
-            ClubLocation = findViewById(R.id.club_location);
-            ClubMentor = findViewById(R.id.club_mentor);
-            Img = findViewById(R.id.club_current_pic);
-
-            ClubName.setText(output[1]);
-            ClubAgeRange.setText(output[2]);
-            ClubLocation.setText(output[3]);
-            Picasso.get().load(output[4]).placeholder(R.drawable.avatar).into(Img);
-            curentColor.setBackgroundColor(Color.parseColor(output[5]));
-            ClubMentor.setText(output[6]);
-
+            ClubName.setText(club);
+            ClubAgeRange.setText(age);
+            ClubLocation.setText(location);
+            Picasso.get().load(picture).placeholder(R.drawable.avatar).into(Img);
+            curentColor.setBackgroundColor(Color.parseColor(color));
+            ClubMentor.setText(mentor);
         }
-        else if(GetAddOrEdit.matches("add"))
-        {
-            addOrEdit.setText("add");
-        }
-
 
         colorPicker.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v)
-            {
-
-                openColorPicker();
-            }
+            public void onClick(View v) { openColorPicker(); }
         });
 
         addImage.setOnClickListener(new View.OnClickListener()
@@ -158,8 +153,8 @@ public class addEditClubActivity extends AppCompatActivity
                 addClubProgress.show();
 
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Clubs");
-                uploadClub();
 
+                uploadOrUpdateClub();
 
 
             }
@@ -197,7 +192,6 @@ public class addEditClubActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null)
         {
             filePath = data.getData();
@@ -212,7 +206,6 @@ public class addEditClubActivity extends AppCompatActivity
                 {
                     filePath = result.getUri();
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-
                     Img = findViewById(club_current_pic);
                     Img.setImageBitmap(bitmap);
                 }
@@ -228,97 +221,78 @@ public class addEditClubActivity extends AppCompatActivity
         }
     }
 
-    private void uploadClub()
+    private void uploadOrUpdateClub()
     {
-        final String ImgID = "images/" + UUID.randomUUID().toString();
-        final StorageReference ref = storageReference.child(ImgID);
-
+        HashMap<String,String> clubMap = new HashMap<>();
 
         if(filePath != null)
         {
-            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+            clubMap.put("Img",filePath.toString());
+        }
+        else
+        {
+            clubMap.put("Img","default");
+        }
+
+        String name = ClubName.getText().toString();
+        String age = ClubAgeRange.getText().toString();
+        String location = ClubLocation.getText().toString();
+        String mentor = ClubMentor.getText().toString();
+
+        if(!TextUtils.isEmpty(name) || !TextUtils.isEmpty(age) || !TextUtils.isEmpty(location) || !TextUtils.isEmpty(mentor))
+        {
+            String hexColor = String.format("#%06X", (0xFFFFFF & defaultColor));
+
+            clubMap.put("Name",name);
+            clubMap.put("Color",hexColor);
+            clubMap.put("Age",age);
+            clubMap.put("Mentor",mentor);
+            clubMap.put("Location",location);
+
+            if(add)
             {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+                mDatabase.push().setValue(clubMap).addOnCompleteListener(new OnCompleteListener<Void>()
                 {
-                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
                     {
-                        @Override
-                        public void onSuccess(Uri uri)
+                        if (task.isSuccessful())
                         {
-                            HashMap<String,String> clubMap = new HashMap<>();
-                            String ImageLink = uri.toString();
+                            addClubProgress.dismiss();
 
-                            if(ImageLink != null)
-                            {
-                                clubMap.put("Img",ImageLink);
-                            }
-                            else
-                            {
-                                clubMap.put("Img","default");
-                            }
-
-                            String name = ClubName.getText().toString();
-                            String age = ClubAgeRange.getText().toString();
-                            String location = ClubLocation.getText().toString();
-                            String mentor = ClubMentor.getText().toString();
-
-                            if(!TextUtils.isEmpty(name) || !TextUtils.isEmpty(age) || !TextUtils.isEmpty(location) || !TextUtils.isEmpty(mentor))
-                            {
-                                String hexColor = String.format("#%06X", (0xFFFFFF & defaultColor));
-
-                                clubMap.put("Name",name);
-                                clubMap.put("Color",hexColor);
-                                clubMap.put("Age",age);
-                                clubMap.put("Mentor",mentor);
-                                clubMap.put("Location",location);
-
-                                mDatabase.push().setValue(clubMap).addOnCompleteListener(new OnCompleteListener<Void>()
-                                {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task)
-                                    {
-                                        if (task.isSuccessful())
-                                        {
-                                            addClubProgress.dismiss();
-
-                                            Intent mainIntent = new Intent(addEditClubActivity.this,HomeActivity.class);
-                                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            startActivity(mainIntent);
-                                            finish();
-
-                                        }
-                                    }
-                                });
-                            }
-                            else
-                            {
-                                addClubProgress.hide();
-                                Toast.makeText(addEditClubActivity.this,"Please make sure all fields are filled in and try again.", Toast.LENGTH_SHORT).show();
-                            }
-
+                            Intent mainIntent = new Intent(addEditClubActivity.this,HomeActivity.class);
+                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(mainIntent);
+                            finish();
                         }
-                    }).addOnFailureListener(new OnFailureListener()
+                    }
+                });
+            }
+            else
+            {
+                mDatabase.setValue(clubMap).addOnCompleteListener(new OnCompleteListener<Void>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
                     {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) { }
-                    });
-                }
-            }).addOnFailureListener(new OnFailureListener()
-            {
-                @Override
-                public void onFailure(@NonNull Exception e)
-                {
-                    Toast.makeText(addEditClubActivity.this, "Image Upload Failed "+e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>()
-            {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot)
-                {
-                    double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
-                }
-            });
+                        if (task.isSuccessful())
+                        {
+                            addClubProgress.dismiss();
+
+                            Intent mainIntent = new Intent(addEditClubActivity.this,HomeActivity.class);
+                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(mainIntent);
+                            finish();
+                        }
+                    }
+                });
+            }
+
+        }
+        else
+        {
+            addClubProgress.hide();
+            Toast.makeText(addEditClubActivity.this,"Please make sure all fields are filled in and try again.", Toast.LENGTH_SHORT).show();
         }
     }
 
