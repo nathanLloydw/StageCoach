@@ -74,6 +74,9 @@ public class addEditClubActivity extends AppCompatActivity
     private DatabaseReference mDatabase;
     private FirebaseUser current_user;
     private String club;
+    private String hexColor;
+    private String picture;
+
 
     //Firebase
     FirebaseStorage storage;
@@ -118,7 +121,7 @@ public class addEditClubActivity extends AppCompatActivity
             club = intent.getStringExtra("name");
             String age = intent.getStringExtra("age");
             String location = intent.getStringExtra("location");
-            String picture = intent.getStringExtra("imgURL");
+            picture = intent.getStringExtra("imgURL");
             String color = intent.getStringExtra("color");
             String mentor = intent.getStringExtra("mentor");
 
@@ -127,6 +130,7 @@ public class addEditClubActivity extends AppCompatActivity
             ClubLocation.setText(location);
             Picasso.get().load(picture).placeholder(R.drawable.avatar).into(Img);
             curentColor.setBackgroundColor(Color.parseColor(color));
+            hexColor = String.format("#%06X", (0xFFFFFF & Color.parseColor(color)));
             ClubMentor.setText(mentor);
         }
 
@@ -178,6 +182,7 @@ public class addEditClubActivity extends AppCompatActivity
             {
                defaultColor = color;
                curentColor.setBackgroundColor(color);
+               hexColor = String.format("#%06X", (0xFFFFFF & defaultColor));
             }
         });
         colorPicker.show();
@@ -234,7 +239,15 @@ public class addEditClubActivity extends AppCompatActivity
         }
         else
         {
-            clubMap.put("Img","default");
+            if(add)
+            {
+                clubMap.put("Img","default");
+            }
+            else
+            {
+                clubMap.put("Img",picture);
+            }
+
         }
 
         String name = ClubName.getText().toString();
@@ -244,8 +257,6 @@ public class addEditClubActivity extends AppCompatActivity
 
         if(!TextUtils.isEmpty(name) || !TextUtils.isEmpty(age) || !TextUtils.isEmpty(location) || !TextUtils.isEmpty(mentor))
         {
-            String hexColor = String.format("#%06X", (0xFFFFFF & defaultColor));
-
             clubMap.put("Name",name);
             clubMap.put("Color",hexColor);
             clubMap.put("Age",age);
