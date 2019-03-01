@@ -6,8 +6,9 @@
     android:layout_height="140dp"
     android:layout_gravity="center"
     android:layout_marginLeft="10dp"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="5dp"
     android:layout_marginRight="10dp"
+    android:layout_marginBottom="5dp"
     app:cardBackgroundColor="@color/common_google_signin_btn_text_dark_disabled"
     app:cardCornerRadius="1dp"
     app:cardElevation="3dp">
@@ -159,14 +160,14 @@
 
             <com.joooonho.SelectableRoundedImageView
                 android:id="@+id/club_image"
-                android:layout_width="85dp"
+                android:layout_width="86dp"
                 android:layout_height="70dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="14dp"
                 app:srcCompat="@drawable/work"
                 app:sriv_left_bottom_corner_radius="5dip"
                 app:sriv_left_top_corner_radius="5dip"
