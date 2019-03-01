@@ -9,7 +9,7 @@
     tools:context=".HomeActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/clubStats_back"
+        android:id="@+id/clubAttendence_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
