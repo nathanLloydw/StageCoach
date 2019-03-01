@@ -127,7 +127,6 @@ public class HomeActivity extends AppCompatActivity
                     @Override
                     public void onClick(View v)
                     {
-
                         Intent add_club_intent = new Intent(HomeActivity.this,addEditClubActivity.class);
                         add_club_intent.putExtra("add/edit","edit ");
                         add_club_intent.putExtra("name",club);
@@ -136,8 +135,8 @@ public class HomeActivity extends AppCompatActivity
                         add_club_intent.putExtra("imgURL",picture);
                         add_club_intent.putExtra("color",color);
                         add_club_intent.putExtra("mentor",mentor);
-                        startActivity(add_club_intent);
 
+                        startActivity(add_club_intent);
                     }
                 });
 
@@ -158,9 +157,8 @@ public class HomeActivity extends AppCompatActivity
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
-                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Clubs");
-                                Query deleteQuery = ref.orderByChild("Name").equalTo(club);
 
+                                Query deleteQuery = databaseReference.orderByChild("Name").equalTo(club);
                                 deleteQuery.addListenerForSingleValueEvent(new ValueEventListener()
                                 {
                                     @Override

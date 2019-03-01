@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,8 +30,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -68,6 +73,7 @@ public class addEditClubActivity extends AppCompatActivity
     private ProgressDialog addClubProgress;
     private DatabaseReference mDatabase;
     private FirebaseUser current_user;
+    private String club;
 
     //Firebase
     FirebaseStorage storage;
@@ -109,13 +115,12 @@ public class addEditClubActivity extends AppCompatActivity
         if(GetAddOrEdit.contains("edit"))
         {
             add = false;
-            String club = intent.getStringExtra("name");
+            club = intent.getStringExtra("name");
             String age = intent.getStringExtra("age");
             String location = intent.getStringExtra("location");
             String picture = intent.getStringExtra("imgURL");
             String color = intent.getStringExtra("color");
             String mentor = intent.getStringExtra("mentor");
-            System.out.println(GetAddOrEdit);
 
             ClubName.setText(club);
             ClubAgeRange.setText(age);
@@ -155,8 +160,6 @@ public class addEditClubActivity extends AppCompatActivity
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Clubs");
 
                 uploadOrUpdateClub();
-
-
             }
         });
     }
@@ -223,7 +226,7 @@ public class addEditClubActivity extends AppCompatActivity
 
     private void uploadOrUpdateClub()
     {
-        HashMap<String,String> clubMap = new HashMap<>();
+        final HashMap<String,String> clubMap = new HashMap<>();
 
         if(filePath != null)
         {
@@ -270,24 +273,39 @@ public class addEditClubActivity extends AppCompatActivity
             }
             else
             {
-                mDatabase.setValue(clubMap).addOnCompleteListener(new OnCompleteListener<Void>()
+                Query editQuery = mDatabase.orderByChild("Name").equalTo(club);
+                editQuery.addListenerForSingleValueEvent(new ValueEventListener()
                 {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task)
+                    public void onDataChange(DataSnapshot dataSnapshot)
                     {
-                        if (task.isSuccessful())
+                        for (DataSnapshot deleteSnapshot: dataSnapshot.getChildren())
                         {
-                            addClubProgress.dismiss();
+                            DatabaseReference clubRef =deleteSnapshot.getRef();
+                            clubRef.setValue(clubMap).addOnCompleteListener(new OnCompleteListener<Void>()
+                            {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task)
+                                {
+                                    if (task.isSuccessful())
+                                    {
+                                        addClubProgress.dismiss();
 
-                            Intent mainIntent = new Intent(addEditClubActivity.this,HomeActivity.class);
-                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(mainIntent);
-                            finish();
+                                        Intent mainIntent = new Intent(addEditClubActivity.this,HomeActivity.class);
+                                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(mainIntent);
+                                        finish();
+                                    }
+                                }
+                            });
+
                         }
                     }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) { }
+
                 });
             }
-
         }
         else
         {
