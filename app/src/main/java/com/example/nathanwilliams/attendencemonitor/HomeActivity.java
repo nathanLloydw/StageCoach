@@ -107,7 +107,8 @@ public class HomeActivity extends AppCompatActivity
                     @Override
                     public void onClick(View v)
                     {
-
+                        Intent attendence_intent = new Intent(HomeActivity.this,AttendenceActivity.class);
+                        startActivity(attendence_intent);
                     }
                 });
 
@@ -117,6 +118,8 @@ public class HomeActivity extends AppCompatActivity
                     @Override
                     public void onClick(View v)
                     {
+                        Intent stats_intent = new Intent(HomeActivity.this,StatsActivity.class);
+                        startActivity(stats_intent);
 
                     }
                 });
