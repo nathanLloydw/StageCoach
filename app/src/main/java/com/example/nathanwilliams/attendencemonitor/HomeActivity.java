@@ -77,12 +77,18 @@ public class HomeActivity extends AppCompatActivity
             @Override
             protected void onBindViewHolder(ClubViewHolder holder, int position, ClubRecycler model)
             {
+                final String club = model.getClubName();
+                final String age = model.getClubAgeGroup();
+                final String location = model.getClubLocation();
+                final String picture = model.getClubImage();
+                final String color = model.getClubColor();
+                final String mentor = model.getClubMentor();
 
-                holder.clubName.setText(model.getClubName());
-                holder.clubAge.setText(model.getClubAgeGroup());
-                holder.clubLocation.setText(model.getClubLocation());
-                holder.clubCardTop.setCardBackgroundColor(Color.parseColor(model.getClubColor()));
-                Picasso.get().load(model.getClubImage()).placeholder(R.drawable.avatar).into(holder.clubImage);
+                holder.clubName.setText(club);
+                holder.clubAge.setText(age);
+                holder.clubLocation.setText(location);
+                holder.clubCardTop.setCardBackgroundColor(Color.parseColor(color));
+                Picasso.get().load(picture).placeholder(R.drawable.avatar).into(holder.clubImage);
 
                 String TransparentColor = model.getClubColor().replace("#","");
 
@@ -94,12 +100,7 @@ public class HomeActivity extends AppCompatActivity
 
                 holder.clubCardBottom.setBackgroundColor(newColor);
 
-                final String club = model.getClubName();
-                final String age = model.getClubAgeGroup();
-                final String location = model.getClubLocation();
-                final String picture = model.getClubImage();
-                final String color = model.getClubColor();
-                final String mentor = model.getClubMentor();
+
 
                 ImageButton takeAttendence = holder.clubAttendenceButton;
                 takeAttendence.setOnClickListener(new View.OnClickListener()

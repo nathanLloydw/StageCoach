@@ -38,6 +38,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.joooonho.SelectableRoundedImageView;
@@ -68,7 +69,7 @@ public class addEditClubActivity extends AppCompatActivity
     private TextView ClubName, ClubAgeRange, ClubLocation,ClubMentor;
 
     private final int PICK_IMAGE_REQUEST = 71;
-    private Uri filePath;
+    private Uri resultUri;
 
     private ProgressDialog addClubProgress;
     private DatabaseReference mDatabase;
@@ -76,11 +77,15 @@ public class addEditClubActivity extends AppCompatActivity
     private String club;
     private String hexColor;
     private String picture;
+    private String uid;
+    private String download_url;
+
 
 
     //Firebase
     FirebaseStorage storage;
     StorageReference storageReference;
+    private StorageReference mImageStorage;
 
 
     @Override
@@ -94,7 +99,7 @@ public class addEditClubActivity extends AppCompatActivity
         storageReference = storage.getReference();
 
         current_user = FirebaseAuth.getInstance().getCurrentUser();
-        final String uid = current_user.getUid();
+        uid = current_user.getUid();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -111,6 +116,7 @@ public class addEditClubActivity extends AppCompatActivity
         ClubLocation = findViewById(R.id.club_location);
         ClubMentor = findViewById(R.id.club_mentor);
         Img = findViewById(R.id.club_current_pic);
+        mImageStorage = FirebaseStorage.getInstance().getReference();
 
         Intent intent = getIntent();
         String GetAddOrEdit = intent.getStringExtra("add/edit");
@@ -202,8 +208,8 @@ public class addEditClubActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null)
         {
-            filePath = data.getData();
-            CropImage.activity(filePath).setAspectRatio(1, 1).start(this);
+            resultUri = data.getData();
+            CropImage.activity(resultUri).setAspectRatio(1, 1).start(this);
         }
         else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
         {
@@ -212,10 +218,29 @@ public class addEditClubActivity extends AppCompatActivity
             {
                 try
                 {
-                    filePath = result.getUri();
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                    resultUri = result.getUri();
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
+
                     Img = findViewById(club_current_pic);
                     Img.setImageBitmap(bitmap);
+
+                    final StorageReference filepath = mImageStorage.child("club_profile").child(uid+".jpg");
+
+                    filepath.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+                        {
+                            filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri)
+                                {
+                                    download_url = uri.toString();
+                                }
+                            });
+                        }
+                    });
+
+
                 }
                 catch (IOException e)
                 {
@@ -233,9 +258,9 @@ public class addEditClubActivity extends AppCompatActivity
     {
         final HashMap<String,String> clubMap = new HashMap<>();
 
-        if(filePath != null)
+        if(download_url != null)
         {
-            clubMap.put("Img",filePath.toString());
+            clubMap.put("Img",download_url);
         }
         else
         {
