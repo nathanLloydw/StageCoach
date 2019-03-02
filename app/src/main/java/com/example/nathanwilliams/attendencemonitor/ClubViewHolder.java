@@ -39,7 +39,6 @@ public class ClubViewHolder extends RecyclerView.ViewHolder
         clubEditButton = itemView.findViewById(R.id.club_edit_button);
         clubStatsButton = itemView.findViewById(R.id.club_stats_button);
         clubAttendenceButton = itemView.findViewById(R.id.club_attendence_button);
-
     }
 
 

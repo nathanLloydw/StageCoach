@@ -317,7 +317,7 @@ public class addEditClubActivity extends AppCompatActivity
                     {
                         for (DataSnapshot deleteSnapshot: dataSnapshot.getChildren())
                         {
-                            DatabaseReference clubRef =deleteSnapshot.getRef();
+                            DatabaseReference clubRef = deleteSnapshot.getRef();
                             clubRef.setValue(clubMap).addOnCompleteListener(new OnCompleteListener<Void>()
                             {
                                 @Override

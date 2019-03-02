@@ -66,14 +66,15 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.club_recyclerView);
         recyclerView.setHasFixedSize(true);
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Clubs");
 
         options = new FirebaseRecyclerOptions.Builder<ClubRecycler>().setQuery(databaseReference,ClubRecycler.class).build();
 
-        adapter = new FirebaseRecyclerAdapter<ClubRecycler, ClubViewHolder>(options) {
+        adapter = new FirebaseRecyclerAdapter<ClubRecycler, ClubViewHolder>(options)
+        {
             @Override
             protected void onBindViewHolder(ClubViewHolder holder, int position, ClubRecycler model)
             {
@@ -109,6 +110,7 @@ public class HomeActivity extends AppCompatActivity
                     public void onClick(View v)
                     {
                         Intent attendence_intent = new Intent(HomeActivity.this,AttendenceActivity.class);
+                        attendence_intent.putExtra("name",club);
                         startActivity(attendence_intent);
                     }
                 });
@@ -243,13 +245,19 @@ public class HomeActivity extends AppCompatActivity
 
         getWindow().getDecorView().findViewsWithText(textViews, getTitle(), View.FIND_VIEWS_WITH_TEXT);
 
-        if(textViews.size() > 0) {
+        if(textViews.size() > 0)
+        {
             AppCompatTextView appCompatTextView = null;
-            if(textViews.size() == 1) {
+            if(textViews.size() == 1)
+            {
                 appCompatTextView = (AppCompatTextView) textViews.get(0);
-            } else {
-                for(View v : textViews) {
-                    if(v.getParent() instanceof Toolbar) {
+            }
+            else
+            {
+                for(View v : textViews)
+                {
+                    if(v.getParent() instanceof Toolbar)
+                    {
                         appCompatTextView = (AppCompatTextView) v;
                         break;
                     }
@@ -265,7 +273,8 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public static int darken(int color, double fraction) {
+    public static int darken(int color, double fraction)
+    {
         int red = Color.red(color);
         int green = Color.green(color);
         int blue = Color.blue(color);
@@ -277,7 +286,8 @@ public class HomeActivity extends AppCompatActivity
         return Color.argb(alpha, red, green, blue);
     }
 
-    private static int darkenColor(int color, double fraction) {
+    private static int darkenColor(int color, double fraction)
+    {
         return (int)Math.max(color - (color * fraction), 0);
     }
 

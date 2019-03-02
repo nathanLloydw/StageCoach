@@ -37,13 +37,15 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".addEditClubActivity"
-            android:label="@string/title_activity_add_club"
+            android:label="@string/app_home"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".StatsActivity"
+            android:label="@string/app_clubStats"/>
+        <activity android:name=".AttendenceActivity"
+            android:label="@string/app_Clubmembers"/>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".StatsActivity" />
-        <activity android:name=".AttendenceActivity"></activity>
     </application>
 
 </manifest>

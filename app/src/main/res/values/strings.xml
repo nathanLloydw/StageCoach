@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Clubs</string>
+    <string name="app_home">Clubs</string>
+    <string name="app_addClub">add new club</string>
+    <string name="app_Clubmembers">members</string>
+    <string name="app_clubStats">Club stats</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_register">Register</string>
     <!-- Strings related to login -->

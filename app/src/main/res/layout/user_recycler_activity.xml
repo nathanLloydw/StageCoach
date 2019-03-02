@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/club_cardWhole"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_gravity="center"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="1dp"
+    app:cardBackgroundColor="@android:color/darker_gray"
+    app:cardCornerRadius="1dp"
+    app:cardElevation="3dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.joooonho.SelectableRoundedImageView
+            android:id="@+id/club_current_pic2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/avatar"
+            app:sriv_border_color="#008fea"
+            app:sriv_border_width="0dip"
+            app:sriv_left_bottom_corner_radius="150dip"
+            app:sriv_left_top_corner_radius="150dip"
+            app:sriv_right_bottom_corner_radius="150dip"
+            app:sriv_right_top_corner_radius="150dip" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="14dp"
+            android:layout_toEndOf="@+id/club_current_pic2"
+            android:text="fullname" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="0dp"
+            android:background="@color/design_default_color_secondary"
+            android:backgroundTint="@color/fui_bgPhone"
+            app:srcCompat="@drawable/ic_check_black_24dp" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
