@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/club_cardWhole"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_card"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="60dp"
     android:layout_gravity="center"
-    android:layout_marginTop="2dp"
-    android:layout_marginBottom="1dp"
-    app:cardBackgroundColor="@android:color/darker_gray"
-    app:cardCornerRadius="1dp"
-    app:cardElevation="3dp">
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="1.5dp"
+    app:cardBackgroundColor="@color/fui_transparent"
+    app:cardCornerRadius="1dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/background_light">
 
         <com.joooonho.SelectableRoundedImageView
             android:id="@+id/club_current_pic2"
@@ -34,23 +35,21 @@
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/club_current_pic2"
-            android:text="fullname" />
+            android:text="fullname"
+            android:textColor="@color/design_default_color_on_secondary" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/user_attendee"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="0dp"
-            android:background="@color/design_default_color_secondary"
-            android:backgroundTint="@color/fui_bgPhone"
-            app:srcCompat="@drawable/ic_check_black_24dp" />
+            android:background="@color/lightRed"
+            app:srcCompat="@drawable/ic_cross_black_24dp" />
 
     </RelativeLayout>
 

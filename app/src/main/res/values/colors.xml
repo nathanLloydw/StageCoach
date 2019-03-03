@@ -9,5 +9,13 @@
     <color name="mainBackground">#292929</color>
     
     <color name="CardBackground">#ce3c4043</color>
+    <color name="lightGrey">#cccccc</color>
+
+    <color name="lightGreen">#4fb34f</color>
+    <color name="darkGreen">#275427</color>
+
+    <color name="lightRed">#d23e3e</color>
+    <color name="darkRed">#791919</color>
+
 
 </resources>

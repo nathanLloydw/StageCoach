@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -36,6 +38,7 @@ public class AttendenceActivity extends AppCompatActivity
     private FirebaseUser current_user;
     private String uid;
     private RecyclerView recyclerView;
+
     FirebaseRecyclerOptions<UserRecycler> options;
     FirebaseRecyclerAdapter<UserRecycler,UserViewHolder> adapter;
 
@@ -63,6 +66,9 @@ public class AttendenceActivity extends AppCompatActivity
         Intent intent = getIntent();
         club = intent.getStringExtra("name");
 
+
+
+
         current_user = FirebaseAuth.getInstance().getCurrentUser();
         uid = current_user.getUid();
 
@@ -72,25 +78,33 @@ public class AttendenceActivity extends AppCompatActivity
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Clubs");
 
 
-        Query editQuery = mDatabase.orderByChild("Name").equalTo(club);
-        editQuery.addListenerForSingleValueEvent(new ValueEventListener()
+        Query userQuery = mDatabase.orderByChild("Name").equalTo(club);
+        userQuery.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                for (DataSnapshot deleteSnapshot: dataSnapshot.getChildren())
+                for (DataSnapshot userSnapshot: dataSnapshot.getChildren())
                 {
-                    DatabaseReference clubRef = deleteSnapshot.getRef();
+                    DatabaseReference clubRef = userSnapshot.getRef();
                     mDatabase = clubRef.child("members");
+
 
                     options = new FirebaseRecyclerOptions.Builder<UserRecycler>().setQuery(mDatabase,UserRecycler.class).build();
                     adapter = new FirebaseRecyclerAdapter<UserRecycler, UserViewHolder>(options)
                     {
                         @Override
-                        protected void onBindViewHolder(UserViewHolder holder, int position, UserRecycler model)
+                        protected void onBindViewHolder(final UserViewHolder holder, int position, UserRecycler model)
                         {
                             String name = model.getUserName();
                             holder.userName.setText(name);
+
+                            ImageButton attendee = holder.AttendeeButton;
+                            attendee.setOnClickListener(new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v) { holder.changeAttendence(); }
+                            });
                         }
 
                         @NonNull

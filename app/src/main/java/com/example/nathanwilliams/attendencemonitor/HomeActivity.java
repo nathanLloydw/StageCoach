@@ -101,8 +101,6 @@ public class HomeActivity extends AppCompatActivity
 
                 holder.clubCardBottom.setBackgroundColor(newColor);
 
-
-
                 ImageButton takeAttendence = holder.clubAttendenceButton;
                 takeAttendence.setOnClickListener(new View.OnClickListener()
                 {
