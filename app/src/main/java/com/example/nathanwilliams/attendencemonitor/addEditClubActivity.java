@@ -82,6 +82,7 @@ public class addEditClubActivity extends AppCompatActivity
 
 
 
+
     //Firebase
     FirebaseStorage storage;
     StorageReference storageReference;
@@ -97,6 +98,7 @@ public class addEditClubActivity extends AppCompatActivity
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        hexColor = "#37C9E6";
 
         current_user = FirebaseAuth.getInstance().getCurrentUser();
         uid = current_user.getUid();
@@ -264,13 +266,13 @@ public class addEditClubActivity extends AppCompatActivity
         }
         else
         {
-            if(add)
+            if(picture != null)
             {
-                clubMap.put("Img","default");
+                clubMap.put("Img",picture);
             }
             else
             {
-                clubMap.put("Img",picture);
+                clubMap.put("Img","default");
             }
 
         }

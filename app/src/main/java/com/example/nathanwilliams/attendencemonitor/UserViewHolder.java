@@ -26,19 +26,17 @@ public class UserViewHolder extends RecyclerView.ViewHolder
         userName = itemView.findViewById(R.id.user_name);
         AttendeeButton = itemView.findViewById(R.id.user_attendee);
     }
-    public void changeAttendence()
+    public void updateAttendence()
     {
         if(attendee)
         {
-            attendee = false;
-            AttendeeButton.setBackgroundResource(R.color.lightRed);
-            AttendeeButton.setImageResource(R.drawable.ic_cross_black_24dp);
+            AttendeeButton.setImageResource(R.drawable.ic_check_black_24dp);
+            AttendeeButton.setBackgroundResource(R.color.lightGreen);
         }
         else
         {
-            attendee = true;
-            AttendeeButton.setImageResource(R.drawable.ic_check_black_24dp);
-            AttendeeButton.setBackgroundResource(R.color.lightGreen);
+            AttendeeButton.setBackgroundResource(R.color.lightRed);
+            AttendeeButton.setImageResource(R.drawable.ic_cross_black_24dp);
         }
 
     }

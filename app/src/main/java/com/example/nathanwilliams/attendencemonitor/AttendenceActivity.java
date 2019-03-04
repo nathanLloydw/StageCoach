@@ -1,18 +1,22 @@
 package com.example.nathanwilliams.attendencemonitor;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -29,7 +33,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 public class AttendenceActivity extends AppCompatActivity
 {
@@ -38,6 +46,7 @@ public class AttendenceActivity extends AppCompatActivity
     private FirebaseUser current_user;
     private String uid;
     private RecyclerView recyclerView;
+    private String newUser = "";
 
     FirebaseRecyclerOptions<UserRecycler> options;
     FirebaseRecyclerAdapter<UserRecycler,UserViewHolder> adapter;
@@ -50,8 +59,8 @@ public class AttendenceActivity extends AppCompatActivity
         setContentView(R.layout.activity_attendence);
         centerTitle();
 
-        FloatingActionButton fab = findViewById(R.id.clubAttendence_back);
-        fab.setOnClickListener(new View.OnClickListener()
+        FloatingActionButton back = findViewById(R.id.clubAttendence_back);
+        back.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
@@ -59,6 +68,46 @@ public class AttendenceActivity extends AppCompatActivity
                 Intent add_club_intent = new Intent(AttendenceActivity.this,HomeActivity.class);
                 add_club_intent.putExtra("add/edit","add");
                 startActivity(add_club_intent);
+
+            }
+        });
+
+        FloatingActionButton add = findViewById(R.id.clubAttendence_add);
+        add.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AttendenceActivity.this);
+                builder.setTitle("Add new pupil");
+                builder.setMessage("new pupils fullname:");
+                final EditText input = new EditText(AttendenceActivity.this);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                builder.setView(input);
+
+                builder.setCancelable(false);
+
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        newUser = input.getText().toString();
+                        addUser(newUser);
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+
+                    }
+                });
+
+                builder.show();
 
             }
         });
@@ -96,14 +145,41 @@ public class AttendenceActivity extends AppCompatActivity
                         @Override
                         protected void onBindViewHolder(final UserViewHolder holder, int position, UserRecycler model)
                         {
-                            String name = model.getUserName();
+                            final String name = model.getUserName();
                             holder.userName.setText(name);
+
+                            String didAttend = model.getattendedToday();
+                            System.out.println(didAttend);
+
+                            if(didAttend.matches("false"))
+                            {
+                                holder.attendee = false;
+                            }
+                            else
+                            {
+                                holder.attendee = true;
+                            }
+                            holder.updateAttendence();
 
                             ImageButton attendee = holder.AttendeeButton;
                             attendee.setOnClickListener(new View.OnClickListener()
                             {
                                 @Override
-                                public void onClick(View v) { holder.changeAttendence(); }
+                                public void onClick(View v)
+                                {
+                                    if(holder.attendee)
+                                    {
+                                        holder.attendee = false;
+                                        holder.updateAttendence();
+                                        changeUserAttendence(mDatabase,name,"false");
+                                    }
+                                    else
+                                    {
+                                        holder.attendee = true;
+                                        holder.updateAttendence();
+                                        changeUserAttendence(mDatabase,name,"true");
+                                    }
+                                }
                             });
                         }
 
@@ -136,6 +212,59 @@ public class AttendenceActivity extends AppCompatActivity
         });
 
 
+    }
+
+    private void addUser(String Username)
+    {
+        final HashMap<String,String> clubMap = new HashMap<>();
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String Currentdate = dateFormat.format(date);
+
+        clubMap.put("name",Username);
+        clubMap.put("currentSession","false");
+
+        mDatabase.push().setValue(clubMap).addOnCompleteListener(new OnCompleteListener<Void>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<Void> task)
+            {
+                if (task.isSuccessful())
+                {
+
+                }
+            }
+        });
+    }
+
+    public void changeUserAttendence(DatabaseReference ref,final String name, final String value)
+    {
+        Query changeAttend = ref.orderByChild("name").equalTo(name);
+        changeAttend.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                for (DataSnapshot editSnapshot: dataSnapshot.getChildren())
+                {
+                    final HashMap<String, String> Map = new HashMap<>();
+                    Map.put("currentSession", value);
+                    Map.put("name", name);
+                    DatabaseReference memberRef = editSnapshot.getRef();
+                    memberRef.setValue(Map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                            }
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+
+        });
     }
 
     @Override
