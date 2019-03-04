@@ -80,9 +80,6 @@ public class addEditClubActivity extends AppCompatActivity
     private String uid;
     private String download_url;
 
-
-
-
     //Firebase
     FirebaseStorage storage;
     StorageReference storageReference;
@@ -258,7 +255,7 @@ public class addEditClubActivity extends AppCompatActivity
 
     private void uploadOrUpdateClub()
     {
-        final HashMap<String,String> clubMap = new HashMap<>();
+        final HashMap<String,Object> clubMap = new HashMap<>();
 
         if(download_url != null)
         {
@@ -317,10 +314,10 @@ public class addEditClubActivity extends AppCompatActivity
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot)
                     {
-                        for (DataSnapshot deleteSnapshot: dataSnapshot.getChildren())
+                        for (DataSnapshot editSnapshot: dataSnapshot.getChildren())
                         {
-                            DatabaseReference clubRef = deleteSnapshot.getRef();
-                            clubRef.setValue(clubMap).addOnCompleteListener(new OnCompleteListener<Void>()
+                            DatabaseReference clubRef = editSnapshot.getRef();
+                            clubRef.updateChildren(clubMap).addOnCompleteListener(new OnCompleteListener<Void>()
                             {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task)

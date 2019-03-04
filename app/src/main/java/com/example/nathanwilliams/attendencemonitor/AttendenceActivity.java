@@ -248,11 +248,11 @@ public class AttendenceActivity extends AppCompatActivity
             {
                 for (DataSnapshot editSnapshot: dataSnapshot.getChildren())
                 {
-                    final HashMap<String, String> Map = new HashMap<>();
+                    final HashMap<String, Object> Map = new HashMap<>();
                     Map.put("currentSession", value);
                     Map.put("name", name);
                     DatabaseReference memberRef = editSnapshot.getRef();
-                    memberRef.setValue(Map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    memberRef.updateChildren(Map).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
