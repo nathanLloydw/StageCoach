@@ -109,6 +109,7 @@ public class HomeActivity extends AppCompatActivity
                     {
                         Intent attendence_intent = new Intent(HomeActivity.this,AttendenceActivity.class);
                         attendence_intent.putExtra("name",club);
+                        attendence_intent.putExtra("date","nil");
                         startActivity(attendence_intent);
                     }
                 });

@@ -16,6 +16,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -34,19 +35,25 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
 public class AttendenceActivity extends AppCompatActivity
 {
     private String club;
+    private String CurrentIntentDate;
     private DatabaseReference mDatabase;
     private FirebaseUser current_user;
     private String uid;
     private RecyclerView recyclerView;
     private String newUser = "";
+    private Button prev,now,next;
+    private String Currentdate;
+    private Calendar c;
 
     FirebaseRecyclerOptions<UserRecycler> options;
     FirebaseRecyclerAdapter<UserRecycler,UserViewHolder> adapter;
@@ -58,6 +65,37 @@ public class AttendenceActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendence);
         centerTitle();
+
+
+        Intent intent = getIntent();
+        CurrentIntentDate = intent.getStringExtra("date");
+        club = intent.getStringExtra("name");
+
+        final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        c =  Calendar.getInstance();
+
+
+        if(CurrentIntentDate.contains("nil"))
+        {
+            Currentdate = dateFormat.format(date);
+        }
+        else
+        {
+            Currentdate = CurrentIntentDate;
+        }
+
+        System.out.println(Currentdate);
+
+        try
+        {
+            c.setTime(dateFormat.parse(Currentdate));
+
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
 
         FloatingActionButton back = findViewById(R.id.clubAttendence_back);
         back.setOnClickListener(new View.OnClickListener()
@@ -112,11 +150,54 @@ public class AttendenceActivity extends AppCompatActivity
             }
         });
 
-        Intent intent = getIntent();
-        club = intent.getStringExtra("name");
+        prev = findViewById(R.id.user_prev);
+        now = findViewById(R.id.user_now);
+        next = findViewById(R.id.user_next);
 
+        prev.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent prevEntry = new Intent(AttendenceActivity.this,AttendenceActivity.class);
+                c.add(Calendar.DATE,-1);
+                Currentdate = dateFormat.format(c.getTime());
+                prevEntry.putExtra("date",Currentdate);
+                prevEntry.putExtra("name",club);
+                System.out.println(Currentdate);
 
+                startActivity(prevEntry);
 
+            }
+        });
+
+        now.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent CurrentEntry = new Intent(AttendenceActivity.this,AttendenceActivity.class);
+                CurrentEntry.putExtra("date","nil");
+                CurrentEntry.putExtra("name",club);
+                startActivity(CurrentEntry);
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent nextEntry = new Intent(AttendenceActivity.this,AttendenceActivity.class);
+                c.add(Calendar.DATE,1);
+                Currentdate = dateFormat.format(c.getTime());
+
+                nextEntry.putExtra("date",Currentdate);
+                nextEntry.putExtra("name",club);
+                System.out.println(Currentdate);
+                startActivity(nextEntry);
+            }
+        });
 
         current_user = FirebaseAuth.getInstance().getCurrentUser();
         uid = current_user.getUid();
@@ -125,7 +206,6 @@ public class AttendenceActivity extends AppCompatActivity
         recyclerView.setHasFixedSize(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Clubs");
-
 
         Query userQuery = mDatabase.orderByChild("Name").equalTo(club);
         userQuery.addListenerForSingleValueEvent(new ValueEventListener()
@@ -136,7 +216,7 @@ public class AttendenceActivity extends AppCompatActivity
                 for (DataSnapshot userSnapshot: dataSnapshot.getChildren())
                 {
                     DatabaseReference clubRef = userSnapshot.getRef();
-                    mDatabase = clubRef.child("members");
+                    mDatabase = clubRef.child("sessions").child(Currentdate);
 
 
                     options = new FirebaseRecyclerOptions.Builder<UserRecycler>().setQuery(mDatabase,UserRecycler.class).build();
@@ -148,7 +228,9 @@ public class AttendenceActivity extends AppCompatActivity
                             final String name = model.getUserName();
                             holder.userName.setText(name);
 
+
                             String didAttend = model.getattendedToday();
+
                             System.out.println(didAttend);
 
                             if(didAttend.matches("false"))
@@ -218,12 +300,8 @@ public class AttendenceActivity extends AppCompatActivity
     {
         final HashMap<String,String> clubMap = new HashMap<>();
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        String Currentdate = dateFormat.format(date);
-
         clubMap.put("name",Username);
-        clubMap.put("currentSession","false");
+        clubMap.put("attend","false");
 
         mDatabase.push().setValue(clubMap).addOnCompleteListener(new OnCompleteListener<Void>()
         {
@@ -249,8 +327,7 @@ public class AttendenceActivity extends AppCompatActivity
                 for (DataSnapshot editSnapshot: dataSnapshot.getChildren())
                 {
                     final HashMap<String, Object> Map = new HashMap<>();
-                    Map.put("currentSession", value);
-                    Map.put("name", name);
+                    Map.put("attend", value);
                     DatabaseReference memberRef = editSnapshot.getRef();
                     memberRef.updateChildren(Map).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

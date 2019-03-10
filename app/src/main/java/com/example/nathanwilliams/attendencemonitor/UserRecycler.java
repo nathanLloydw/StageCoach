@@ -4,7 +4,7 @@ public class UserRecycler
 {
 
     public String name;
-    public String currentSession;
+    public String attend;
 
     public UserRecycler()
     {
@@ -14,7 +14,7 @@ public class UserRecycler
     public UserRecycler(String UserName,String didAttendToday)
     {
         this.name = UserName;
-        this.currentSession = didAttendToday;
+        //this.attend = didAttendToday;
 
     }
     public String getUserName()
@@ -27,14 +27,8 @@ public class UserRecycler
         name = clubName;
     }
 
-    public String getattendedToday()
-    {
-        return currentSession;
-    }
+    public String getattendedToday(){return attend; }
 
-    public void setattendedToday(String attended)
-    {
-        currentSession = attended;
-    }
+    public void setattendedToday(String attended){attend = attended;}
 
 }
