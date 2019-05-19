@@ -59,14 +59,17 @@ public class addEditClubActivity extends AppCompatActivity
 {
 
     private RelativeLayout curentColor;
+    private int pickedColor = 1620180;
     private int defaultColor;
 
     private Boolean add = true;
     private Button addImage;
+    private Button monday,tuesday,wednesday,thursday,friday,saturday,sunday;
+    private boolean mon,tue,wed,thu,fri,sat,sun;
     private ImageButton colorPicker;
     private SelectableRoundedImageView Img;
 
-    private TextView ClubName, ClubAgeRange, ClubLocation,ClubMentor;
+    private TextView ClubName, ClubAgeRange, ClubLocation,ClubMentor,clubSize;
 
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri resultUri;
@@ -95,7 +98,6 @@ public class addEditClubActivity extends AppCompatActivity
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        hexColor = "#37C9E6";
 
         current_user = FirebaseAuth.getInstance().getCurrentUser();
         uid = current_user.getUid();
@@ -103,6 +105,13 @@ public class addEditClubActivity extends AppCompatActivity
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         addImage = findViewById(R.id.club_change_pic);
+        monday = findViewById(R.id.club_monday);
+        tuesday = findViewById(R.id.club_tuesday);
+        wednesday = findViewById(R.id.club_wednesday);
+        thursday = findViewById(R.id.club_thursday);
+        friday = findViewById(R.id.club_friday);
+        saturday = findViewById(R.id.club_saturday);
+        sunday = findViewById(R.id.club_sunday);
 
         addClubProgress = new ProgressDialog(this);
 
@@ -114,6 +123,7 @@ public class addEditClubActivity extends AppCompatActivity
         ClubAgeRange = findViewById(R.id.club_age_range);
         ClubLocation = findViewById(R.id.club_location);
         ClubMentor = findViewById(R.id.club_mentor);
+        clubSize = findViewById(R.id.club_term);
         Img = findViewById(R.id.club_current_pic);
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
@@ -127,15 +137,19 @@ public class addEditClubActivity extends AppCompatActivity
             String age = intent.getStringExtra("age");
             String location = intent.getStringExtra("location");
             picture = intent.getStringExtra("imgURL");
+
             String color = intent.getStringExtra("color");
+            pickedColor = Color.parseColor(color);
+
             String mentor = intent.getStringExtra("mentor");
 
             ClubName.setText(club);
             ClubAgeRange.setText(age);
             ClubLocation.setText(location);
             Picasso.get().load(picture).placeholder(R.drawable.avatar).into(Img);
-            curentColor.setBackgroundColor(Color.parseColor(color));
-            hexColor = String.format("#%06X", (0xFFFFFF & Color.parseColor(color)));
+            updateColors();
+
+
             ClubMentor.setText(mentor);
         }
 
@@ -155,6 +169,14 @@ public class addEditClubActivity extends AppCompatActivity
             }
         });
 
+        monday.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { day("monday"); }});
+        tuesday.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { day("tuesday"); }});
+        wednesday.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { day("wednesday"); }});
+        thursday.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { day("thursday"); }});
+        friday.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { day("friday"); }});
+        saturday.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { day("saturday"); }});
+        sunday.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { day("sunday"); }});
+
         FloatingActionButton saveClub = findViewById(R.id.club_save);
         saveClub.setOnClickListener(new View.OnClickListener()
         {
@@ -173,9 +195,106 @@ public class addEditClubActivity extends AppCompatActivity
         });
     }
 
+    public void day(String day)
+    {
+        switch(day)
+        {
+            case "monday":
+                if(mon)
+                {
+                    mon = false;
+                    //monday.setBackgroundColor(defaultColor);
+                    monday.setBackgroundColor(Color.BLUE);
+                    System.out.println("COLOR OFF, COLOR: "+pickedColor);
+                }
+                else
+                {
+                    mon = true;
+                    //monday.setBackgroundColor(pickedColor);
+                    monday.setBackgroundColor(Color.GREEN);
+                    System.out.println("COLOR ON, COLOR: "+pickedColor);
+                }
+                break;
+            case "tuesday":
+                if(tue)
+                {
+                    tue = false;
+                    tuesday.setBackgroundColor(defaultColor);
+                }
+                else
+                {
+                    tue = true;
+                    tuesday.setBackgroundColor(pickedColor);
+                }
+                break;
+            case "wednesday":
+                if(wed)
+                {
+                    wed = false;
+                    wednesday.setBackgroundColor(defaultColor);
+                }
+                else
+                {
+                    wed = true;
+                    wednesday.setBackgroundColor(pickedColor);
+                }
+                break;
+            case "thursday":
+                if(thu)
+                {
+                    thu = false;
+                    thursday.setBackgroundColor(defaultColor);
+                }
+                else
+                {
+                    thu = true;
+                    thursday.setBackgroundColor(pickedColor);
+                }
+                break;
+            case "friday":
+                if(fri)
+                {
+                    fri = false;
+                    friday.setBackgroundColor(defaultColor);
+                }
+                else
+                {
+                    fri = true;
+                    friday.setBackgroundColor(pickedColor);
+                }
+                break;
+            case "saturday":
+                if(sat)
+                {
+                    sat = false;
+                    saturday.setBackgroundColor(defaultColor);
+                }
+                else
+                {
+                    sat = true;
+                    saturday.setBackgroundColor(pickedColor);
+                }
+                break;
+            case "sunday":
+                if(sun)
+                {
+                    sun = false;
+                    sunday.setBackgroundColor(defaultColor);
+                }
+                else
+                {
+                    sun = true;
+                    sunday.setBackgroundColor(pickedColor);
+                }
+                break;
+        }
+
+
+    }
+
     public void openColorPicker()
     {
-        AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(this, defaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+        AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(this, pickedColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
             @Override
             public void onCancel(AmbilWarnaDialog dialog)
             {
@@ -185,12 +304,18 @@ public class addEditClubActivity extends AppCompatActivity
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color)
             {
-               defaultColor = color;
-               curentColor.setBackgroundColor(color);
-               hexColor = String.format("#%06X", (0xFFFFFF & defaultColor));
+               pickedColor = color;
+               updateColors();
+               //curentColor.setBackgroundColor(color);
+               //hexColor = String.format("#%06X", (0xFFFFFF & defaultColor));
             }
         });
         colorPicker.show();
+    }
+    public void updateColors()
+    {
+        System.out.println("coloooorrrrrrrr is : "+pickedColor);
+        curentColor.setBackgroundColor(pickedColor);
     }
 
     private void chooseImage()
@@ -278,10 +403,12 @@ public class addEditClubActivity extends AppCompatActivity
         String age = ClubAgeRange.getText().toString();
         String location = ClubLocation.getText().toString();
         String mentor = ClubMentor.getText().toString();
+        String hexColor = String.format("#%06X", (0xFFFFFF & pickedColor));
 
         if(!TextUtils.isEmpty(name) || !TextUtils.isEmpty(age) || !TextUtils.isEmpty(location) || !TextUtils.isEmpty(mentor))
         {
             clubMap.put("Name",name);
+
             clubMap.put("Color",hexColor);
             clubMap.put("Age",age);
             clubMap.put("Mentor",mentor);

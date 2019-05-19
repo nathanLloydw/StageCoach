@@ -52,6 +52,52 @@
         android:layout_gravity="bottom"
         android:layout_weight="60">
 
+        <EditText
+            android:id="@+id/club_term"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/club_location"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="139dp"
+            android:backgroundTint="@color/colorAccent"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="term length"
+            android:textAlignment="center"
+            android:textColor="@color/browser_actions_title_color" />
+
+        <Button
+            android:id="@+id/club_friday"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@+id/club_monday"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/club_thursday"
+            android:backgroundTint="@color/colorAccent"
+            android:text="F" />
+
+        <Button
+            android:id="@+id/club_saturday"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@+id/club_monday"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/club_friday"
+            android:backgroundTint="@color/colorAccent"
+            android:text="S" />
+
+        <Button
+            android:id="@+id/club_sunday"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@+id/club_monday"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/club_saturday"
+            android:backgroundTint="@color/colorAccent"
+            android:text="S" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/club_save"
             android:layout_width="wrap_content"
@@ -61,8 +107,8 @@
             android:layout_gravity="bottom|end"
             android:layout_marginStart="@dimen/fab_margin"
             android:layout_marginTop="@dimen/fab_margin"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             app:backgroundTint="@color/colorAccent"
             app:srcCompat="@drawable/ic_save_black_24dp" />
 
@@ -80,83 +126,97 @@
 
         <EditText
             android:id="@+id/club_name"
-            android:layout_width="300dp"
+            android:layout_width="311dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/club_change_pic"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:backgroundTint="@color/colorAccent"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="club name"
+            android:textColor="@color/browser_actions_title_color" />
 
         <EditText
             android:id="@+id/club_age_range"
-            android:layout_width="300dp"
+            android:layout_width="311dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/club_name"
             android:layout_alignStart="@+id/club_name"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:backgroundTint="@color/colorAccent"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="age group"
+            android:textColor="@color/browser_actions_title_color" />
 
         <EditText
             android:id="@+id/club_location"
-            android:layout_width="300dp"
+            android:layout_width="311dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/club_age_range"
             android:layout_alignStart="@+id/club_name"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:backgroundTint="@color/colorAccent"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="location"
+            android:textColor="@color/browser_actions_title_color" />
 
         <EditText
             android:id="@+id/club_mentor"
-            android:layout_width="300dp"
+            android:layout_width="311dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/club_location"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:backgroundTint="@color/colorAccent"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="mentor/coach"
+            android:textColor="@color/browser_actions_title_color" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/club_monday"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_above="@+id/club_save"
             android:layout_alignStart="@+id/club_name"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="55dp"
-            android:text="Club Name" />
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="35dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="M" />
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/club_age_range"
-            android:layout_alignStart="@+id/club_name"
-            android:layout_marginBottom="-25dp"
-            android:text="Age Range" />
+        <Button
+            android:id="@+id/club_tuesday"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@+id/club_monday"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/club_monday"
+            android:backgroundTint="@color/colorAccent"
+            android:text="T" />
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/club_location"
-            android:layout_alignStart="@+id/club_name"
-            android:layout_marginBottom="-25dp"
-            android:text="Location" />
+        <Button
+            android:id="@+id/club_wednesday"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@+id/club_monday"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/club_tuesday"
+            android:backgroundTint="@color/colorAccent"
+            android:text="W" />
 
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/club_mentor"
-            android:layout_alignStart="@+id/club_name"
-            android:layout_marginBottom="-25dp"
-            android:text="Mentor" />
+        <Button
+            android:id="@+id/club_thursday"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@+id/club_monday"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/club_wednesday"
+            android:backgroundTint="@color/colorAccent"
+            android:text="T" />
 
     </RelativeLayout>
 
