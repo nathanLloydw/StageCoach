@@ -74,7 +74,6 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="0dp"
             android:layout_toEndOf="@+id/club_thursday"
-            android:backgroundTint="@color/colorAccent"
             android:text="F" />
 
         <Button
@@ -85,7 +84,6 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="0dp"
             android:layout_toEndOf="@+id/club_friday"
-            android:backgroundTint="@color/colorAccent"
             android:text="S" />
 
         <Button
@@ -95,7 +93,6 @@
             android:layout_alignTop="@+id/club_monday"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/club_saturday"
-            android:backgroundTint="@color/colorAccent"
             android:text="S" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -184,7 +181,6 @@
             android:layout_alignStart="@+id/club_name"
             android:layout_marginStart="0dp"
             android:layout_marginBottom="35dp"
-            android:backgroundTint="@color/colorAccent"
             android:text="M" />
 
         <Button
@@ -194,7 +190,6 @@
             android:layout_alignTop="@+id/club_monday"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/club_monday"
-            android:backgroundTint="@color/colorAccent"
             android:text="T" />
 
         <Button
@@ -204,7 +199,6 @@
             android:layout_alignTop="@+id/club_monday"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/club_tuesday"
-            android:backgroundTint="@color/colorAccent"
             android:text="W" />
 
         <Button
@@ -215,7 +209,6 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="0dp"
             android:layout_toEndOf="@+id/club_wednesday"
-            android:backgroundTint="@color/colorAccent"
             android:text="T" />
 
     </RelativeLayout>
