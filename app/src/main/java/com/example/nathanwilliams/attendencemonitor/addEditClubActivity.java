@@ -2,6 +2,7 @@ package com.example.nathanwilliams.attendencemonitor;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -59,7 +60,7 @@ public class addEditClubActivity extends AppCompatActivity
 {
 
     private RelativeLayout curentColor;
-    private int pickedColor = 1620180;
+    private int pickedColor;
     private int defaultColor;
 
     private Boolean add = true;
@@ -82,6 +83,7 @@ public class addEditClubActivity extends AppCompatActivity
     private String picture;
     private String uid;
     private String download_url;
+    private FloatingActionButton saveClub;
 
     //Firebase
     FirebaseStorage storage;
@@ -116,7 +118,8 @@ public class addEditClubActivity extends AppCompatActivity
         addClubProgress = new ProgressDialog(this);
 
         curentColor = findViewById(R.id.club_current_color);
-        defaultColor = ContextCompat.getColor(addEditClubActivity.this,R.color.colorAccent);
+        defaultColor = ContextCompat.getColor(addEditClubActivity.this,R.color.buttonGray);
+        pickedColor = ContextCompat.getColor(addEditClubActivity.this,R.color.colorAccent);
         colorPicker = findViewById(R.id.club_colorPicker);
 
         ClubName = findViewById(R.id.club_name);
@@ -177,7 +180,7 @@ public class addEditClubActivity extends AppCompatActivity
         saturday.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { day("saturday"); }});
         sunday.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { day("sunday"); }});
 
-        FloatingActionButton saveClub = findViewById(R.id.club_save);
+        saveClub = findViewById(R.id.club_save);
         saveClub.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -203,89 +206,87 @@ public class addEditClubActivity extends AppCompatActivity
                 if(mon)
                 {
                     mon = false;
-                    //monday.setBackgroundColor(defaultColor);
-                    monday.setBackgroundColor(Color.BLUE);
-                    System.out.println("COLOR OFF, COLOR: "+pickedColor);
+                    monday.setBackgroundTintList(ColorStateList.valueOf(defaultColor));
                 }
                 else
                 {
                     mon = true;
-                    //monday.setBackgroundColor(pickedColor);
-                    monday.setBackgroundColor(Color.GREEN);
-                    System.out.println("COLOR ON, COLOR: "+pickedColor);
+                    monday.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
                 }
                 break;
             case "tuesday":
                 if(tue)
                 {
                     tue = false;
-                    tuesday.setBackgroundColor(defaultColor);
+                    tuesday.setBackgroundTintList(ColorStateList.valueOf(defaultColor));
                 }
                 else
                 {
                     tue = true;
-                    tuesday.setBackgroundColor(pickedColor);
+                    tuesday.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
                 }
                 break;
             case "wednesday":
                 if(wed)
                 {
                     wed = false;
-                    wednesday.setBackgroundColor(defaultColor);
+                    wednesday.setBackgroundTintList(ColorStateList.valueOf(defaultColor));
                 }
                 else
                 {
                     wed = true;
-                    wednesday.setBackgroundColor(pickedColor);
+                    wednesday.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
                 }
                 break;
             case "thursday":
                 if(thu)
                 {
                     thu = false;
-                    thursday.setBackgroundColor(defaultColor);
+                    thursday.setBackgroundTintList(ColorStateList.valueOf(defaultColor));
                 }
                 else
                 {
                     thu = true;
-                    thursday.setBackgroundColor(pickedColor);
+                    thursday.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
                 }
                 break;
             case "friday":
                 if(fri)
                 {
                     fri = false;
-                    friday.setBackgroundColor(defaultColor);
+                    friday.setBackgroundTintList(ColorStateList.valueOf(defaultColor));
                 }
                 else
                 {
                     fri = true;
-                    friday.setBackgroundColor(pickedColor);
+                    friday.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
                 }
                 break;
             case "saturday":
                 if(sat)
                 {
                     sat = false;
-                    saturday.setBackgroundColor(defaultColor);
+                    saturday.setBackgroundTintList(ColorStateList.valueOf(defaultColor));
                 }
                 else
                 {
                     sat = true;
-                    saturday.setBackgroundColor(pickedColor);
+                    saturday.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
                 }
                 break;
             case "sunday":
                 if(sun)
                 {
                     sun = false;
-                    sunday.setBackgroundColor(defaultColor);
+                    sunday.setBackgroundTintList(ColorStateList.valueOf(defaultColor));
                 }
                 else
                 {
                     sun = true;
-                    sunday.setBackgroundColor(pickedColor);
+                    sunday.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
                 }
+                break;
+            case "all":
                 break;
         }
 
@@ -316,6 +317,13 @@ public class addEditClubActivity extends AppCompatActivity
     {
         System.out.println("coloooorrrrrrrr is : "+pickedColor);
         curentColor.setBackgroundColor(pickedColor);
+        addImage.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
+        saveClub.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
+        ClubName.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
+        ClubAgeRange.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
+        ClubLocation.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
+        ClubMentor.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
+        clubSize.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
     }
 
     private void chooseImage()
