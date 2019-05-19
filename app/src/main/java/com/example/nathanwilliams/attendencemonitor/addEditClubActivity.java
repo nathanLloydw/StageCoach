@@ -105,7 +105,7 @@ public class addEditClubActivity extends AppCompatActivity
         uid = current_user.getUid();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
+        saveClub = findViewById(R.id.club_save);
         addImage = findViewById(R.id.club_change_pic);
         monday = findViewById(R.id.club_monday);
         tuesday = findViewById(R.id.club_tuesday);
@@ -180,7 +180,6 @@ public class addEditClubActivity extends AppCompatActivity
         saturday.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { day("saturday"); }});
         sunday.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { day("sunday"); }});
 
-        saveClub = findViewById(R.id.club_save);
         saveClub.setOnClickListener(new View.OnClickListener()
         {
             @Override
