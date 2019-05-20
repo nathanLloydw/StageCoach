@@ -9,6 +9,8 @@
     <color name="mainBackground">#292929</color>
     
     <color name="CardBackground">#ce3c4043</color>
+    <color name="HomeBackground">#2f3235</color>
+
     <color name="buttonGray">#d2d2d2</color>
     <color name="lightGrey">#cccccc</color>
 

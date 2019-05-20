@@ -43,7 +43,7 @@
         android:background="#11000000"
         android:drawableLeft="@drawable/ic_action_pass"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:textColor="#fff"
         android:textColorHint="#fff" />
 

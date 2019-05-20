@@ -23,16 +23,12 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 public class SignInActivity extends AppCompatActivity {
 
-    //buttons to take user to selected location
-    private TextView mRegBtn;
-    private TextView mLogTxt;
-    private CardView mLogBtn;
-
     //user details for log in
     private EditText Email, Password;
 
     //firebase authentication
     private FirebaseAuth Auth;
+    //database connection
     private DatabaseReference UserDatabase;
 
     //progress bar
@@ -44,98 +40,75 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
+        //firebase authentication and database connection instantiation
         Auth = FirebaseAuth.getInstance();
+        UserDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
+        //connect layout fields to this activity
         Email = findViewById(R.id.login_email);
         Password = findViewById(R.id.login_password);
 
+        CardView mLogBtn = findViewById(R.id.login_btn);
+        TextView mLogTxt = findViewById(R.id.login_btn_txt);
+        TextView mRegBtn = findViewById(R.id.login_register);
+
+        //create progress bar in preparation
         LoginProgress = new ProgressDialog(this);
-
-        UserDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
-
-        ToRegister();
-
-        mLogBtn = findViewById(R.id.login_btn);
-        mLogTxt = findViewById(R.id.login_btn_txt);
 
         mLogTxt.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
-            {
-                String email = Email.getText().toString();
-                String password = Password.getText().toString();
-
-                if(!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password))
-                {
-
-                    LoginProgress.setTitle("loging In");
-                    LoginProgress.setMessage("Keep Calm alan!");
-                    LoginProgress.setCanceledOnTouchOutside(false);
-                    LoginProgress.show();
-                    loginUser(email,password);
-
-                }
-                else
-                {
-                    Toast.makeText(SignInActivity.this,"please make sure the username and email are filled in correctly.", Toast.LENGTH_SHORT).show();
-                }
-            }
+            public void onClick(View view) { toLogon(); }
         });
 
         mLogBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
-            {
-                String email = Email.getText().toString().trim();
-                String password = Password.getText().toString().trim();
-
-                if(!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password))
-                {
-
-                    LoginProgress.setTitle("loging In");
-                    LoginProgress.setMessage("Keep Calm alan!");
-                    LoginProgress.setCanceledOnTouchOutside(false);
-                    LoginProgress.show();
-                    loginUser(email,password);
-
-                }
-                else
-                {
-                    Toast.makeText(SignInActivity.this,"please make sure the username and email are filled in correctly.", Toast.LENGTH_SHORT).show();
-                }
-            }
+            public void onClick(View view) { toLogon(); }
         });
-    }
-
-    public void ToRegister()
-    {
-        mRegBtn = findViewById(R.id.login_register);
 
         mRegBtn.setOnClickListener(new View.OnClickListener()
         {
             Intent reg_intent = new Intent(SignInActivity.this,RegisterActivity.class);
-
             @Override
             public void onClick(View view)
             {
                 startActivity(reg_intent);
             }
-
         });
+    }
+
+    public void toLogon()
+    {
+        String email = Email.getText().toString().trim();
+        String password = Password.getText().toString().trim();
+
+        if(!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password))
+        {
+
+            LoginProgress.setTitle("loging In");
+            LoginProgress.setMessage("Keep Calm alan!");
+            LoginProgress.setCanceledOnTouchOutside(false);
+            LoginProgress.show();
+            loginUser(email,password);
+        }
+        else
+        {
+            Toast.makeText(SignInActivity.this,"please make sure the username and email are filled in correctly.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loginUser(String email, String password)
     {
+        //instantiate log in with firebase servers
         Auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>()
         {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task)
             {
-
                 if(task.isSuccessful())
                 {
+                    //logging in was successful
                     LoginProgress.dismiss();
 
                     String current_user_id = Auth.getCurrentUser().getUid();
@@ -152,17 +125,13 @@ public class SignInActivity extends AppCompatActivity {
                             finish();
                         }
                     });
-
-
-
                 }
                 else
                 {
+                    //log in failed
                     LoginProgress.hide();
-
                     Toast.makeText(SignInActivity.this,"Can not login, please check form and try again.", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
