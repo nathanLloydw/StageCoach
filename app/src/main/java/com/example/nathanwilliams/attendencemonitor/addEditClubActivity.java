@@ -329,6 +329,14 @@ public class addEditClubActivity extends AppCompatActivity
         ClubLocation.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
         ClubMentor.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
         clubSize.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
+
+        if(mon) { monday.setBackgroundTintList(ColorStateList.valueOf(pickedColor)); }
+        if(tue) { tuesday.setBackgroundTintList(ColorStateList.valueOf(pickedColor)); }
+        if(wed) { wednesday.setBackgroundTintList(ColorStateList.valueOf(pickedColor)); }
+        if(thu) { thursday.setBackgroundTintList(ColorStateList.valueOf(pickedColor)); }
+        if(fri) { friday.setBackgroundTintList(ColorStateList.valueOf(pickedColor)); }
+        if(sat) { saturday.setBackgroundTintList(ColorStateList.valueOf(pickedColor)); }
+        if(sun) { sunday.setBackgroundTintList(ColorStateList.valueOf(pickedColor)); }
     }
 
     private void chooseImage()
@@ -361,7 +369,7 @@ public class addEditClubActivity extends AppCompatActivity
                     Img = findViewById(club_current_pic);
                     Img.setImageBitmap(bitmap);
 
-                    final StorageReference filepath = mImageStorage.child("club_profile").child(uid+".jpg");
+                    final StorageReference filepath = mImageStorage.child("club_profile").child(ClubName.getText().toString()+".jpg");
 
                     filepath.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
