@@ -70,7 +70,7 @@ public class addEditClubActivity extends AppCompatActivity
     private ImageButton colorPicker;
     private SelectableRoundedImageView Img;
 
-    private TextView ClubName, ClubAgeRange, ClubLocation,ClubMentor,clubSize;
+    private TextView ClubName, ClubAgeRange, ClubLocation,ClubMentor,ClubTerm;
 
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri resultUri;
@@ -132,7 +132,7 @@ public class addEditClubActivity extends AppCompatActivity
         ClubAgeRange = findViewById(R.id.club_age_range);
         ClubLocation = findViewById(R.id.club_location);
         ClubMentor = findViewById(R.id.club_mentor);
-        clubSize = findViewById(R.id.club_term);
+        ClubTerm = findViewById(R.id.club_term);
         Img = findViewById(R.id.club_current_pic);
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
@@ -151,7 +151,12 @@ public class addEditClubActivity extends AppCompatActivity
             pickedColor = Color.parseColor(color);
 
             String mentor = intent.getStringExtra("mentor");
+            String termDays = intent.getStringExtra("days");
+            String termSize = intent.getStringExtra("weeks");
 
+            setTermDays(termDays);
+
+            ClubTerm.setText(termSize);
             ClubName.setText(club);
             ClubAgeRange.setText(age);
             ClubLocation.setText(location);
@@ -328,7 +333,7 @@ public class addEditClubActivity extends AppCompatActivity
         ClubAgeRange.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
         ClubLocation.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
         ClubMentor.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
-        clubSize.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
+        ClubTerm.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
 
         if(mon) { monday.setBackgroundTintList(ColorStateList.valueOf(pickedColor)); }
         if(tue) { tuesday.setBackgroundTintList(ColorStateList.valueOf(pickedColor)); }
@@ -424,6 +429,7 @@ public class addEditClubActivity extends AppCompatActivity
         String age = ClubAgeRange.getText().toString();
         String location = ClubLocation.getText().toString();
         String mentor = ClubMentor.getText().toString();
+        String termSize = ClubTerm.getText().toString();
         String hexColor = String.format("#%06X", (0xFFFFFF & pickedColor));
 
         if(!TextUtils.isEmpty(name) || !TextUtils.isEmpty(age) || !TextUtils.isEmpty(location) || !TextUtils.isEmpty(mentor))
@@ -434,6 +440,8 @@ public class addEditClubActivity extends AppCompatActivity
             clubMap.put("Age",age);
             clubMap.put("Mentor",mentor);
             clubMap.put("Location",location);
+            clubMap.put("Days",getTermDays());
+            clubMap.put("Length",termSize);
 
             if(add)
             {
@@ -495,5 +503,30 @@ public class addEditClubActivity extends AppCompatActivity
             addClubProgress.hide();
             Toast.makeText(addEditClubActivity.this,"Please make sure all fields are filled in and try again.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public String getTermDays()
+    {
+        String days = "";
+
+        if(mon){days += "Mon "; };
+        if(tue){days += "Tue "; };
+        if(wed){days += "Wed "; };
+        if(thu){days += "Thu "; };
+        if(fri){days += "Fri "; };
+        if(sat){days += "Sat "; };
+        if(sun){days += "Sun "; };
+        return days;
+    }
+
+    public void setTermDays(String days)
+    {
+        if(days.contains("Mon")) { mon = true; }
+        if(days.contains("Tue")) { tue = true; }
+        if(days.contains("Wed")) { wed = true; }
+        if(days.contains("Thu")) { thu = true; }
+        if(days.contains("Fri")) { fri = true; }
+        if(days.contains("Sat")) { sat = true; }
+        if(days.contains("Sun")) { sun = true; }
     }
 }

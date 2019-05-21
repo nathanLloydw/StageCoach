@@ -5,14 +5,14 @@ import com.google.firebase.storage.StorageReference;
 public class ClubRecycler
 {
 
-    public String Name,Age,Color,Mentor,Location,Img;
+    public String Name,Age,Color,Mentor,Location,Img,Length,Days;
 
     public ClubRecycler()
     {
 
     }
 
-    public ClubRecycler(String ClubName, String ClubAgeGroup, String ClubColor, String ClubMentor, String ClubLocation, String ClubImage)
+    public ClubRecycler(String ClubName, String ClubAgeGroup, String ClubColor, String ClubMentor, String ClubLocation, String ClubImage, String ClubTermSize, String ClubTermDays)
     {
         this.Name = ClubName;
         this.Age = ClubAgeGroup;
@@ -20,6 +20,8 @@ public class ClubRecycler
         this.Mentor = ClubMentor;
         this.Location = ClubLocation;
         this.Img = ClubImage;
+        this.Length = ClubTermSize;
+        this.Days = ClubTermDays;
     }
     public String getClubName()
     {
@@ -74,4 +76,12 @@ public class ClubRecycler
     {
         Img = clubImage;
     }
+
+    public String getClubTermLength() { return Length; }
+
+    public void setClubTermLength(String TermSize) { Length = TermSize; }
+
+    public String getClubTermDays() { return Days; }
+
+    public void setClubTermDays(String TermDays) { Days = TermDays; }
 }

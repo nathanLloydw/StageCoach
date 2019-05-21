@@ -61,8 +61,8 @@
             android:layout_marginTop="139dp"
             android:backgroundTint="@color/colorAccent"
             android:ems="10"
+            android:hint="term length"
             android:inputType="textPersonName"
-            android:text="term length"
             android:textAlignment="center"
             android:textColor="@color/browser_actions_title_color" />
 
@@ -130,8 +130,8 @@
             android:layout_marginTop="15dp"
             android:backgroundTint="@color/colorAccent"
             android:ems="10"
+            android:hint="club name"
             android:inputType="textPersonName"
-            android:text="club name"
             android:textColor="@color/browser_actions_title_color" />
 
         <EditText
@@ -143,8 +143,8 @@
             android:layout_marginTop="15dp"
             android:backgroundTint="@color/colorAccent"
             android:ems="10"
+            android:hint="age group"
             android:inputType="textPersonName"
-            android:text="age group"
             android:textColor="@color/browser_actions_title_color" />
 
         <EditText
@@ -156,8 +156,8 @@
             android:layout_marginTop="15dp"
             android:backgroundTint="@color/colorAccent"
             android:ems="10"
+            android:hint="location"
             android:inputType="textPersonName"
-            android:text="location"
             android:textColor="@color/browser_actions_title_color" />
 
         <EditText
@@ -169,8 +169,8 @@
             android:layout_marginTop="15dp"
             android:backgroundTint="@color/colorAccent"
             android:ems="10"
+            android:hint="mentor/coach"
             android:inputType="textPersonName"
-            android:text="mentor/coach"
             android:textColor="@color/browser_actions_title_color" />
 
         <Button

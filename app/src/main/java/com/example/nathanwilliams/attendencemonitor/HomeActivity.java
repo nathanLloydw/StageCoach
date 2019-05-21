@@ -90,6 +90,8 @@ public class HomeActivity extends AppCompatActivity
                 final String picture = model.getClubImage();
                 final String color = model.getClubColor();
                 final String mentor = model.getClubMentor();
+                final String termDays = model.getClubTermDays();
+                final String termSize = model.getClubTermLength();
 
                 holder.clubName.setText(club);
                 holder.clubAge.setText(age);
@@ -146,6 +148,8 @@ public class HomeActivity extends AppCompatActivity
                         add_club_intent.putExtra("imgURL",picture);
                         add_club_intent.putExtra("color",color);
                         add_club_intent.putExtra("mentor",mentor);
+                        add_club_intent.putExtra("days",termDays);
+                        add_club_intent.putExtra("weeks",termSize);
 
                         startActivity(add_club_intent);
                     }
