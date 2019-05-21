@@ -59,7 +59,7 @@ import static com.example.nathanwilliams.attendencemonitor.R.id.club_location;
 public class addEditClubActivity extends AppCompatActivity
 {
 
-    private RelativeLayout curentColor;
+    private RelativeLayout currentColor;
     private int pickedColor;
     private int defaultColor;
 
@@ -123,7 +123,7 @@ public class addEditClubActivity extends AppCompatActivity
 
         addClubProgress = new ProgressDialog(this);
 
-        curentColor = findViewById(R.id.club_current_color);
+        currentColor = findViewById(R.id.club_current_color);
         defaultColor = ContextCompat.getColor(addEditClubActivity.this,R.color.buttonGray);
         pickedColor = ContextCompat.getColor(addEditClubActivity.this,R.color.colorAccent);
         colorPicker = findViewById(R.id.club_colorPicker);
@@ -326,7 +326,7 @@ public class addEditClubActivity extends AppCompatActivity
     public void updateColors()
     {
         System.out.println("coloooorrrrrrrr is : "+pickedColor);
-        curentColor.setBackgroundColor(pickedColor);
+        currentColor.setBackgroundColor(pickedColor);
         addImage.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
         saveClub.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
         ClubName.setBackgroundTintList(ColorStateList.valueOf(pickedColor));
