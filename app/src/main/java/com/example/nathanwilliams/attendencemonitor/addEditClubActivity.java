@@ -90,13 +90,19 @@ public class addEditClubActivity extends AppCompatActivity
     StorageReference storageReference;
     private StorageReference mImageStorage;
 
+    // global functions
+    globalFunctions globalFunctions;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_club);
-        centerTitle();
+
+        globalFunctions = new globalFunctions(getApplicationContext());
+        globalFunctions.centerTitle(this);
+
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -482,41 +488,4 @@ public class addEditClubActivity extends AppCompatActivity
             Toast.makeText(addEditClubActivity.this,"Please make sure all fields are filled in and try again.", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-    private void centerTitle()
-    {
-        ArrayList<View> textViews = new ArrayList<>();
-
-        getWindow().getDecorView().findViewsWithText(textViews, getTitle(), View.FIND_VIEWS_WITH_TEXT);
-
-        if(textViews.size() > 0)
-        {
-            AppCompatTextView appCompatTextView = null;
-            if(textViews.size() == 1)
-            {
-                appCompatTextView = (AppCompatTextView) textViews.get(0);
-            }
-            else
-            {
-                for(View v : textViews)
-                {
-                    if(v.getParent() instanceof Toolbar)
-                    {
-                        appCompatTextView = (AppCompatTextView) v;
-                        break;
-                    }
-                }
-            }
-
-            if(appCompatTextView != null)
-            {
-                ViewGroup.LayoutParams params = appCompatTextView.getLayoutParams();
-                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                appCompatTextView.setLayoutParams(params);
-                appCompatTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            }
-        }
-    }
-
 }

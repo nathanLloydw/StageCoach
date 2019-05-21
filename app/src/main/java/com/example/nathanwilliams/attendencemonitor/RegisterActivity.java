@@ -113,11 +113,11 @@ public class RegisterActivity extends AppCompatActivity
                     //our connection to the firebase database
                     Database = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
-                    String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                    //String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
                     HashMap<String,String> userMap = new HashMap<>();
                     userMap.put("name",display_name);
-                    userMap.put("device_token",deviceToken);
+                    //userMap.put("device_token",deviceToken);
 
                     Database.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

@@ -48,6 +48,7 @@ public class SignInActivity extends AppCompatActivity {
         Email = findViewById(R.id.login_email);
         Password = findViewById(R.id.login_password);
 
+        //buttons for logging in or redirection to register page
         CardView mLogBtn = findViewById(R.id.login_btn);
         TextView mLogTxt = findViewById(R.id.login_btn_txt);
         TextView mRegBtn = findViewById(R.id.login_register);
@@ -135,8 +136,4 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
 }

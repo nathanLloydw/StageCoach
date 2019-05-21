@@ -1,6 +1,7 @@
 package com.example.nathanwilliams.attendencemonitor;
 
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -34,6 +35,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import static java.security.AccessController.getContext;
+
 
 public class HomeActivity extends AppCompatActivity
 {
@@ -43,13 +46,16 @@ public class HomeActivity extends AppCompatActivity
     DatabaseReference databaseReference;
     FirebaseRecyclerOptions<ClubRecycler> options;
     FirebaseRecyclerAdapter<ClubRecycler,ClubViewHolder> adapter;
+    globalFunctions globalFunctions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        centerTitle();
+
+        globalFunctions = new globalFunctions(getApplicationContext());
+        globalFunctions.centerTitle(this);
 
         FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
         final String uid = current_user.getUid();
@@ -236,40 +242,6 @@ public class HomeActivity extends AppCompatActivity
         super.onResume();
         if(adapter!= null)
             adapter.startListening();
-    }
-
-    private void centerTitle()
-    {
-        ArrayList<View> textViews = new ArrayList<>();
-
-        getWindow().getDecorView().findViewsWithText(textViews, getTitle(), View.FIND_VIEWS_WITH_TEXT);
-
-        if(textViews.size() > 0)
-        {
-            AppCompatTextView appCompatTextView = null;
-            if(textViews.size() == 1)
-            {
-                appCompatTextView = (AppCompatTextView) textViews.get(0);
-            }
-            else
-            {
-                for(View v : textViews)
-                {
-                    if(v.getParent() instanceof Toolbar)
-                    {
-                        appCompatTextView = (AppCompatTextView) v;
-                        break;
-                    }
-                }
-            }
-
-            if(appCompatTextView != null) {
-                ViewGroup.LayoutParams params = appCompatTextView.getLayoutParams();
-                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                appCompatTextView.setLayoutParams(params);
-                appCompatTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            }
-        }
     }
 
     public static int darken(int color, double fraction)
