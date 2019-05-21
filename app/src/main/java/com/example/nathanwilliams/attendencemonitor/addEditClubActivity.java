@@ -7,26 +7,19 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,23 +31,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.joooonho.SelectableRoundedImageView;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
-
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 import static com.example.nathanwilliams.attendencemonitor.R.id.club_current_pic;
-import static com.example.nathanwilliams.attendencemonitor.R.id.club_location;
+
 
 public class addEditClubActivity extends AppCompatActivity
 {
@@ -67,19 +54,16 @@ public class addEditClubActivity extends AppCompatActivity
     private Button addImage;
     private Button monday,tuesday,wednesday,thursday,friday,saturday,sunday;
     private boolean mon,tue,wed,thu,fri,sat,sun;
-    private ImageButton colorPicker;
     private SelectableRoundedImageView Img;
 
     private TextView ClubName, ClubAgeRange, ClubLocation,ClubMentor,ClubTerm;
 
     private final int PICK_IMAGE_REQUEST = 71;
-    private Uri resultUri;
+
 
     private ProgressDialog addClubProgress;
     private DatabaseReference mDatabase;
-    private FirebaseUser current_user;
     private String club;
-    private String hexColor;
     private String picture;
     private String uid;
     private String download_url;
@@ -107,7 +91,7 @@ public class addEditClubActivity extends AppCompatActivity
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        current_user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
         uid = current_user.getUid();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -126,7 +110,7 @@ public class addEditClubActivity extends AppCompatActivity
         currentColor = findViewById(R.id.club_current_color);
         defaultColor = ContextCompat.getColor(addEditClubActivity.this,R.color.buttonGray);
         pickedColor = ContextCompat.getColor(addEditClubActivity.this,R.color.colorAccent);
-        colorPicker = findViewById(R.id.club_colorPicker);
+        ImageButton colorPicker = findViewById(R.id.club_colorPicker);
 
         ClubName = findViewById(R.id.club_name);
         ClubAgeRange = findViewById(R.id.club_age_range);
@@ -356,9 +340,10 @@ public class addEditClubActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+        Uri resultUri = data.getData();
+
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null)
         {
-            resultUri = data.getData();
             CropImage.activity(resultUri).setAspectRatio(1, 1).start(this);
         }
         else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
