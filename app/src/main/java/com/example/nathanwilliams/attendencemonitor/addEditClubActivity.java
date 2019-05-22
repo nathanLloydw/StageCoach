@@ -345,6 +345,7 @@ public class addEditClubActivity extends AppCompatActivity
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null)
         {
             CropImage.activity(resultUri).setAspectRatio(1, 1).start(this);
+            System.out.println("test");
         }
         else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
         {
@@ -385,6 +386,7 @@ public class addEditClubActivity extends AppCompatActivity
             else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE)
             {
                 Exception error = result.getError();
+                System.out.println(error);
             }
         }
     }
@@ -407,7 +409,6 @@ public class addEditClubActivity extends AppCompatActivity
             {
                 clubMap.put("Img","default");
             }
-
         }
 
         String name = ClubName.getText().toString();
@@ -494,13 +495,13 @@ public class addEditClubActivity extends AppCompatActivity
     {
         String days = "";
 
-        if(mon){days += "Mon "; };
-        if(tue){days += "Tue "; };
-        if(wed){days += "Wed "; };
-        if(thu){days += "Thu "; };
-        if(fri){days += "Fri "; };
-        if(sat){days += "Sat "; };
-        if(sun){days += "Sun "; };
+        if(mon){days += "Mon "; }
+        if(tue){days += "Tue "; }
+        if(wed){days += "Wed "; }
+        if(thu){days += "Thu "; }
+        if(fri){days += "Fri "; }
+        if(sat){days += "Sat "; }
+        if(sun){days += "Sun "; }
         return days;
     }
 
