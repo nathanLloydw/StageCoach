@@ -66,8 +66,9 @@ public class addEditClubActivity extends AppCompatActivity
     private String club;
     private String picture;
     private String uid;
-    private String download_url;
+    private String download_url = "default";
     private FloatingActionButton saveClub;
+    private Uri resultUri;
 
     //Firebase
     FirebaseStorage storage;
@@ -118,6 +119,7 @@ public class addEditClubActivity extends AppCompatActivity
         ClubMentor = findViewById(R.id.club_mentor);
         ClubTerm = findViewById(R.id.club_term);
         Img = findViewById(R.id.club_current_pic);
+
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
         Intent intent = getIntent();
@@ -187,7 +189,8 @@ public class addEditClubActivity extends AppCompatActivity
 
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Clubs");
 
-                uploadOrUpdateClub();
+                uploadImage();
+                //uploadOrUpdateClub();
             }
         });
     }
@@ -340,7 +343,7 @@ public class addEditClubActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        Uri resultUri = data.getData();
+        resultUri = data.getData();
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null)
         {
@@ -351,31 +354,12 @@ public class addEditClubActivity extends AppCompatActivity
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK)
             {
+                resultUri = result.getUri();
+
                 try
                 {
-                    resultUri = result.getUri();
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
-
-                    Img = findViewById(club_current_pic);
                     Img.setImageBitmap(bitmap);
-
-                    final StorageReference filepath = mImageStorage.child("club_profile").child(ClubName.getText().toString()+".jpg");
-
-                    filepath.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-                        {
-                            filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri)
-                                {
-                                    download_url = uri.toString();
-                                }
-                            });
-                        }
-                    });
-
-
                 }
                 catch (IOException e)
                 {
@@ -389,26 +373,34 @@ public class addEditClubActivity extends AppCompatActivity
         }
     }
 
+    private void uploadImage()
+    {
+        final StorageReference filepath = mImageStorage.child("club_profile").child(ClubName.getText().toString()+".jpg");
+
+        filepath.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+        {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+            {
+                filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                {
+                    @Override
+                    public void onSuccess(Uri uri)
+                    {
+
+                        download_url = uri.toString();
+                        uploadOrUpdateClub();
+                    }
+                });
+
+            }
+        });
+    }
+
     private void uploadOrUpdateClub()
     {
+
         final HashMap<String,Object> clubMap = new HashMap<>();
-
-        if(download_url != null)
-        {
-            clubMap.put("Img",download_url);
-        }
-        else
-        {
-            if(picture != null)
-            {
-                clubMap.put("Img",picture);
-            }
-            else
-            {
-                clubMap.put("Img","default");
-            }
-
-        }
 
         String name = ClubName.getText().toString();
         String age = ClubAgeRange.getText().toString();
@@ -420,13 +412,13 @@ public class addEditClubActivity extends AppCompatActivity
         if(!TextUtils.isEmpty(name) || !TextUtils.isEmpty(age) || !TextUtils.isEmpty(location) || !TextUtils.isEmpty(mentor))
         {
             clubMap.put("Name",name);
-
             clubMap.put("Color",hexColor);
             clubMap.put("Age",age);
             clubMap.put("Mentor",mentor);
             clubMap.put("Location",location);
             clubMap.put("Days",getTermDays());
             clubMap.put("Length",termSize);
+            clubMap.put("Img",download_url);
 
             if(add)
             {
